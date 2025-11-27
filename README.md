@@ -1,83 +1,81 @@
-# TEACh: preview_raw_turn 사용법
+# Embodied Agent Data Generation Pipeline
 
-이 문서는 `preview_raw_turn.py` 스크립트를 사용해 EDH 인스턴스, 대응 game 파일, 그리고 해당 턴의 state JSON을 하나의 JSON으로 묶어 미리보기(preview)하는 방법을 설명합니다.
+This repository contains the data generation pipeline for the research:
+**"Robot Action as an External Tool for LLMs: Multi-turn Embodied Reasoning"**.
 
-## 위치
-- 스크립트: `teach_to_tool_calling/dataset/scripts/preview_raw_turn.py`
-- 데이터 루트(예): `/teach_dataset` (도메인 루트에 위치)
+This pipeline transforms raw TEACh robot states (JSON) into optimized textual prompts suitable for small LLMs (e.g., Llama-3-8B), enabling efficient tool learning and reasoning.
 
-## 요구사항
-- Python 3.7/3.8
-- TEACh 데이터가 `--data_root`로 지정한 경로에 풀려 있어야 함
+---
 
-## 기본 사용 예시
-- EDH 인스턴스 목록에서 첫 파일의 0번째 턴을 미리보기하고 `/tmp/preview.json`에 저장:
+## 🚀 Methodology: Two-Stage Perception Pipeline
 
-```bash
-python /home/bjk/tool_learning/teach_to_tool_calling/dataset/scripts/preview_raw_turn.py \
-  --data_root /teach_dataset \
-  --edh_index 0 \
-  --turn_idx 0 \
-  --out /tmp/preview.json
-```
+We propose a modular approach to handle long-context robot observations.
 
-- EDH 파일을 직접 지정해서 특정 턴 미리보기:
+### Stage 1: Perception Module (Deterministic)
+Before feeding data to the LLM, a Python-based module processes the raw JSON state to reduce token usage and computational load.
+1.  **State Merging:** Merges `initial_state` (Map) and `state_diff` (Updates) to maintain a complete and up-to-date world model.
+2.  **Relative Coordinate Calculation:** Computes distance ($r$) and relative angle ($\theta$) to provide precise parameters for `motion_delta` (e.g., "1.5m, 45° Right").
+3.  **Task-Aware Filtering:** Prunes irrelevant objects based on `spatial` or `semantic` logic using `all-MiniLM-L6-v2`.
+4.  **State Abstraction:** Converts JSON to natural language, retaining only 11 dynamic states (e.g., `Open`, `Dirty`, `Visible`) and discarding static capabilities.
 
-```bash
-python /home/bjk/tool_learning/teach_to_tool_calling/dataset/scripts/preview_raw_turn.py \
-  --data_root /teach_dataset \
-  --edh_fn /teach_dataset/edh_instances/valid_seen/abcd1234_0.edh0.json \
-  --turn_idx 3 \
-  --out /tmp/abcd1234_turn3_preview.json
-```
+### Stage 2: Reasoning Module (LLM)
+The LLM receives the refined text from Stage 1 and generates robot actions (Function Calls).
 
-## 출력 결과
-- 지정한 `--out` 경로에 JSON이 생성됩니다. JSON에는 다음 정보가 포함됩니다:
-  - `edh_fn`: 사용한 EDH 인스턴스 경로
-  - `game_id`: EDH에서 추출한 game ID
-  - `game_fn`: 대응되는 `.game.json` 파일 경로(발견 시)
-  - `edh`: EDH 인스턴스 전체 contents
-  - `episode_meta`: `task_idx`/`episode_idx` 등 EDH 메타
-  - `selected_interaction_idx`: 요청한 턴 인덱스
-  - `edh_interaction`: EDH의 해당 인터랙션 디테일
-  - `game_interaction_at_same_index`: (가능한 경우) game file에서 같은 인덱스의 interaction
-  - `state_fn`: 매칭되는 상태 JSON 파일 경로(발견 시)
-  - `state`: state JSON의 내용(발견 시)
+---
 
-## 힌트 & 문제 해결
-- 종종 `state_fn`을 찾지 못할 수 있습니다. TEACh 버전에 따라 state/이미지 파일 저장 방식이 달라졌기 때문에 스크립트는 휴리스틱을 사용합니다.
-  - 이 경우 `/teach_dataset/images` 또는 `/teach_dataset/images_and_states` 폴더 내의 `game_id`로 시작하는 파일들을 수동으로 검색해 주시고, 필요한 경우 스크립트를 고쳐 `find_state_file_for_turn`의 휴리스틱을 조정할 수 있습니다.
-- EDH와 `.game.json` 매핑이 잘못되는 경우에는 EDH metadata(`structured_log_fn`, `game_id`, `episode_idx`)를 확인해서 직접 `--edh_fn`으로 지정하세요.
+## 🧪 Dataset Configurations
 
-## 다음 개선 아이디어
-- `--include_images` 옵션을 추가해 관련 이미지 파일 목록 또는 썸네일을 JSON에 포함
-- 여러 EDH 인스턴스를 한꺼번에 미리보기하는 배치 모드
-- 기본적으로 `--out`을 `/tmp/<game_id>_turnX_preview.json` 형태로 자동 생성
+We generate three distinct datasets to validate the efficiency of our Hybrid strategy.
 
-## Turn extraction and compression
+| Dataset Name | Filter Mode | Logic (Parallel Union) | Thresholds | Role |
+| :--- | :--- | :--- | :--- | :--- |
+| **Spatial** | `spatial` | `Landmark` $\cup$ `Visible` $\cup$ `Dist < 5.0m` | $r=5.0m$ | **Strong Baseline** (Standard Robot FOV) |
+| **Semantic** | `semantic` | `Landmark` $\cup$ `Visible` $\cup$ `Sim > 0.3` | $Sim=0.3$ | **Ablation Study** (No proximity safety) |
+| **Hybrid** | `hybrid` | `Landmark` $\cup$ `Visible` $\cup$ `Sim > 0.35` $\cup$ `Dist < 2.5m` | $r=2.5m, Sim=0.35$ | **Proposed Method** (Efficient & Safe) |
 
-추가로 `teach_to_tool_calling/dataset/extract_turns.py` 스크립트를 포함했습니다. 이 스크립트는 EDH 인스턴스들을 순회하면서 `task -> episode -> turn` 구조로 데이터를 정리하고, 연속된 같은 동작(`Forward`, `Turn Right` 등)을 압축(compress)할 수 있습니다.
+*Note: The Naive Baseline (No Filter) is excluded as it causes Context Overflow (OOM) on 8B models.*
 
-간단한 예시 실행:
+---
 
-```bash
-python teach_to_tool_calling/dataset/extract_turns.py \
-  --data_root /teach_dataset \
-  --out /tmp/turns.json \
-  --grouped-out /tmp/turns_grouped.json \
-  --compress
-```
+## 💻 Usage
 
-`--grouped-out` 옵션을 지정하면 task -> episode -> [edh entries] 계층으로 묶어서 내보냅니다.
+### 1. Install Dependencies
+This project requires `sentence-transformers` for semantic similarity calculation.
 
-참고: 추출기 자체는 `state` 정보를 포함하지 않습니다. `game_id`와 turn 액션의 첫 타임스탬프를 사용해서 필요할 경우 별도 스크립트로 state를 가져오실 수 있습니다.
+pip install sentence-transformers
 
-원하면 위 개선 중 하나를 바로 추가해 드릴게요.
+### 2. Generate All Datasets (Recommended)
+Use the provided shell script to generate all three experimental datasets (Spatial, Semantic, Hybrid) in one go. This is the standard way to prepare data for the experiments.
 
+**Steps:**
+1. Open `generate_datasets.sh` and modify the `EPISODE_ROOT` and `OUTPUT_BASE` variables to match your local file paths.
+2. Grant execution permission and run the script:
 
+# Give execution permission (only needed once)
+chmod +x generate_datasets.sh
 
-# 모든 task_* / episode_* 변환
-./run_build_dataset.sh
+# Run the generation pipeline
+./generate_datasets.sh
 
-# 특정 task만
-./run_build_dataset.sh --task-ids 0 1
+### 3. (Optional) Run individual Mode
+python build_dataset.py \
+    --episode-root /path/to/episode_data_wo_state \
+    --output-root /path/to/output_dir \
+    --filter-mode semantic \
+    --embedding-model all-MiniLM-L6-v2
+
+--episode-root: Path to the input directory containing TEACh episode JSON files.
+
+--output-root: Target directory where the .jsonl files will be saved.
+
+--filter-mode: Filtering strategy. Choose between spatial, semantic, or hybrid.
+
+--embedding-model: (Optional) HuggingFace model name for embeddings. Default is all-MiniLM-L6-v2.
+
+## Implementation details
+### State Abstraction (JSON to Text)
+
+We remove 95% of token-heavy raw data (e.g., 8-point bounding boxes, mass) and retain only actionable states to reduce cognitive load on the 8B model.Kept States (11 Types): Visible, Held, Open, On, Dirty, Filled, Sliced, Cooked, Broken, Empty, Hot/Cold.Navigation Info: Converted from absolute $(x, y, z)$ to Relative Polar Coordinates (e.g., "1.5m, 45° Right") to facilitate motion_delta prediction.
+
+### Parallel filter logic
+Unlike sequential filtering, we use a Union (OR) logic to prevent information loss.Spatial Mode (Baseline): Retains objects within $5.0m$ radius or visible ones.Hybrid Mode (Ours): Retains objects if they match any of the following:Semantically Relevant (Similarity > 0.35)Very Close ($< 2.5m$, for collision avoidance)Visible (in camera view)Landmarks (Fixed furniture for map grounding)

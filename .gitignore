@@ -11,3 +11,6 @@ processed_dataset/
 
 # episode data without state
 episode_data_wo_state/
+
+# dataset
+dataset_experiments/

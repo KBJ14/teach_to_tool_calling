@@ -1,1171 +1,610 @@
 import json
 import math
+import argparse
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+from tqdm import tqdm
 
-# Try to import TEACh utilities for accurate task checks. If unavailable, we'll fall back to
-# the simpler action-flag heuristics.
+# Try to import TEACh utilities for accurate task checks.
 try:
     from teach.utils import create_task_thor_from_state_diff, update_objs_with_custom_metadata
     _HAS_TEACH_UTILS = True
 except Exception:
     _HAS_TEACH_UTILS = False
-import argparse
+
+# Try to import SentenceTransformer
+try:
+    from sentence_transformers import SentenceTransformer, util
+    _HAS_SBERT = True
+except ImportError:
+    _HAS_SBERT = False
 
 
 # ---------- CONFIG ----------
 
 REPO_ROOT = Path("/home/bjk/tool_learning/teach_to_tool_calling")
-EPISODE_ROOT = REPO_ROOT / "episode_data_wo_state"   # task_*/episode_*.json
 TOOLS_JSON = REPO_ROOT / "dataset/prompts/tools.json"
-DATASET_OUTPUT = REPO_ROOT / "dataset/teach_robot_tools_train.jsonl"
+TEACH_ROOT = Path("/teach_dataset")
 
-TEACH_ROOT = Path("/teach_dataset")  # game / edh / images 경로의 공통 prefix
-
-# ---------- BASE PROMPT TEMPLATE (고정) ----------
+# ---------- PROMPT TEMPLATE ----------
 
 BASE_PROMPT = """
 You are a high-level robot control assistant in a simulated home environment.
 
 The following information describes the current context:
 
-Initial scene state:
+### Environmental Context (Perception & Map):
 {initial_state}
 
-Dialogue history so far:
+### Dialogue History:
 {dialogue_history}
 
-Previous tool calls executed:
+### Previous Actions:
 {previous_actions}
 
-State changes after previous actions (state_diff):
-{state_diff}
-
-Available robot control tools:
+### Available Tools:
 {tool_list}
 
 Your task:
-Based on the latest Commander utterance in the dialogue history and the context above,
+Based on the latest Commander utterance and the environmental context,
 decide the next robot actions.
 
 Output format:
-Return ONLY a JSON object with:
-- "actions": a list of tool calls to execute in sequence.
-- Each action includes:
-  - "tool_name": string
-  - "parameters": object (empty if the tool has no parameters)
-
-If the appropriate response is pure natural language and no tool use is required,
-return "actions": [].
-
-Example output format:
- {{
-     "actions": [
-         {{
-             "tool_name": "motion_delta",
-             "parameters": {{
-                 "x": dx,
-                 "y": dy,
-                 "z": dz,
-                 "rot_x": drot_x,
-                 "rot_y": drot_y,
-                 "rot_z": drot_z
-             }}
-         }}
-     ]
- }}
+Return ONLY a JSON object with "actions" list.
 """
 
-
-# ---------- PARSE ARGS UTILS ----------
+# ---------- PARSE ARGS ----------
 
 def parse_args():
     parser = argparse.ArgumentParser()
-
+    parser.add_argument("--episode-root", type=str, required=True, help="episode_data_wo_state root path")
+    parser.add_argument("--output-root", type=str, required=True, help="Output root path")
+    parser.add_argument("--task-ids", type=str, default=None, help="Comma separated task ids")
+    
     parser.add_argument(
-        "--episode-root",
-        type=str,
-        required=True,
-        help="episode_data_wo_state 루트 경로"
+        "--filter-mode", 
+        type=str, 
+        default="spatial", 
+        choices=["spatial", "semantic", "hybrid"],
+        help="spatial (Baseline), semantic, hybrid (Ours)"
     )
     parser.add_argument(
-        "--output-root",
-        type=str,
-        required=True,
-        help="생성된 데이터셋을 저장할 루트 경로"
+        "--embedding-model", 
+        type=str, 
+        default="all-MiniLM-L6-v2",
+        help="Embedding model for semantic filtering"
     )
-
-    parser.add_argument(
-        "--task-ids",
-        type=str,
-        default=None,
-        help="쉼표로 구분된 task id들 (예: '0' 또는 '0,1,3')"
-    )
-
     return parser.parse_args()
 
 
-# ---------- IO UTILS ----------
+# ---------- CONTEXT PROCESSOR (Perception Module) ----------
+
+class ContextProcessor:
+    def __init__(self, mode: str, model_name: str):
+        self.mode = mode
+        self.model = None
+        
+        # Thresholds
+        self.SPATIAL_THRESHOLD = 5.0
+        self.NEARBY_THRESHOLD = 2.5
+        self.SEMANTIC_THRESHOLD = 0.3 
+        
+        # Landmarks
+        self.LANDMARKS = {
+            "Bed", "Desk", "Dresser", "ArmChair", "SideTable", "CounterTop", 
+            "Floor", "Wall", "Door", "Window", "Drawer", "GarbageCan", 
+            "LaundryHamper", "Fridge", "Stove", "Sink", "Bathtub", "Toilet",
+            "Sofa", "Table", "Cabinet", "Shelf", "Microwave", "CoffeeMachine",
+            "StoveBurner", "DiningTable", "TVStand", "Safe"
+        }
+
+        if "semantic" in mode or "hybrid" in mode:
+            if not _HAS_SBERT:
+                raise ImportError("sentence-transformers is required.")
+            self.model = SentenceTransformer(model_name)
+    
+    def _get_relative_coords(self, agent_pos: Dict, agent_rot: Dict, obj_pos: Dict) -> Tuple[float, float, str]:
+        if not agent_pos or not obj_pos: return 999.9, 0.0, ""
+        
+        dx = obj_pos['x'] - agent_pos['x']
+        dz = obj_pos['z'] - agent_pos['z']
+        dist = math.sqrt(dx*dx + dz*dz)
+        
+        target_angle_global = math.degrees(math.atan2(dx, dz))
+        agent_yaw = agent_rot.get('y', 0.0)
+        
+        rel_angle = (target_angle_global - agent_yaw) % 360
+        if rel_angle > 180: rel_angle -= 360
+        
+        if -45 <= rel_angle <= 45: direction = "Front"
+        elif 45 < rel_angle <= 135: direction = "Right"
+        elif -135 <= rel_angle < -45: direction = "Left"
+        else: direction = "Back"
+            
+        return dist, rel_angle, direction
+
+    def _format_object_text(self, obj: Dict, dist: float, rel_angle: float, direction: str) -> str:
+        obj_type = obj.get("objectType")
+        if not obj_type:
+            obj_type = obj.get("name", "").split('_')[0].split('(')[0]
+        
+        states = []
+        if obj.get("visible"): states.append("Visible")
+        else: states.append("Map Knowledge")
+        
+        if obj.get("isPickedUp"): states.append("Held")
+        if obj.get("isOpen"): states.append("Open")
+        if obj.get("isToggled"): states.append("On")
+        
+        if obj.get("isDirty"): states.append("Dirty")
+        if obj.get("isFilledWithLiquid"): states.append("Filled")
+        if obj.get("isSliced"): states.append("Sliced")
+        if obj.get("isCooked"): states.append("Cooked")
+        if obj.get("isBroken"): states.append("Broken")
+        if obj.get("isUsedUp"): states.append("Empty")
+        
+        temp = obj.get("ObjectTemperature")
+        if temp == "Hot": states.append("Hot")
+        elif temp == "Cold": states.append("Cold")
+
+        state_str = ", ".join(states)
+        
+        loc_str = ""
+        parents = obj.get("parentReceptacles")
+        if parents and len(parents) > 0:
+            p_name = parents[0].split('|')[0]
+            loc_str = f"in/on {p_name}"
+
+        if "Held" in states:
+            nav_info = "Held by Agent"
+        else:
+            nav_info = f"{dist:.1f}m, {rel_angle:.0f}° {direction}"
+        
+        details = [nav_info]
+        if loc_str: details.append(loc_str)
+        if state_str: details.append(state_str)
+        
+        return f"- {obj_type} ({', '.join(details)})"
+
+    def process_state(self, state: Dict[str, Any], instruction: str) -> str:
+        objects = state.get("objects", [])
+        agent_data = state.get("agents", {}) or {}
+        
+        agent_pos = {"x": 0, "y": 0, "z": 0}
+        agent_rot = {"x": 0, "y": 0, "z": 0}
+        
+        if isinstance(agent_data, list) and len(agent_data) > 0:
+            for ag in agent_data:
+                if ag.get("name") == "agent":
+                    agent_pos = ag.get("position", agent_pos)
+                    agent_rot = ag.get("rotation", agent_rot)
+                    break
+        elif isinstance(agent_data, dict):
+            ag = agent_data.get("agent", {})
+            agent_pos = ag.get("position", agent_pos)
+            agent_rot = ag.get("rotation", agent_rot)
+
+        if not objects: return "(No objects information available)"
+
+        query_embedding = None
+        if self.model and instruction and instruction.strip():
+            query_embedding = self.model.encode(instruction, convert_to_tensor=True)
+
+        landmarks_text = []
+        relevant_text = []
+        nearby_text = []
+
+        for obj in objects:
+            if not isinstance(obj, dict): continue
+            
+            obj_type = obj.get("objectType")
+            if not obj_type: obj_type = obj.get("name", "").split('_')[0].split('(')[0]
+            
+            dist, rel_angle, direction = self._get_relative_coords(agent_pos, agent_rot, obj.get("position"))
+            
+            is_visible = bool(obj.get("visible", False))
+            is_landmark = obj_type in self.LANDMARKS
+            is_nearby = dist < self.NEARBY_THRESHOLD
+            
+            should_keep = False
+            is_target_candidate = False
+
+            if self.mode == "spatial":
+                if is_landmark or dist < self.SPATIAL_THRESHOLD or is_visible:
+                    should_keep = True
+                    if (dist < self.SPATIAL_THRESHOLD or is_visible) and not is_landmark:
+                        is_target_candidate = True
+            
+            elif self.mode == "semantic":
+                if is_landmark or is_visible:
+                    should_keep = True
+                    if is_visible and not is_landmark: is_target_candidate = True
+                
+                if self.model and query_embedding is not None:
+                    target_name = obj_type
+                    obj_emb = self.model.encode(target_name, convert_to_tensor=True)
+                    score = util.cos_sim(query_embedding, obj_emb).item()
+                    if score > self.SEMANTIC_THRESHOLD: 
+                        should_keep = True
+                        is_target_candidate = True
+            
+            elif self.mode == "hybrid":
+                if is_landmark:
+                    should_keep = True
+                else:
+                    semantic_hit = False
+                    if self.model and query_embedding is not None:
+                        target_name = obj_type
+                        obj_emb = self.model.encode(target_name, convert_to_tensor=True)
+                        score = util.cos_sim(query_embedding, obj_emb).item()
+                        if score > 0.35: semantic_hit = True
+                    
+                    if semantic_hit or is_nearby or is_visible:
+                        should_keep = True
+                        if semantic_hit: is_target_candidate = True
+                        elif is_visible and not is_nearby: is_target_candidate = False 
+
+            if should_keep:
+                desc = self._format_object_text(obj, dist, rel_angle, direction)
+                if is_landmark: landmarks_text.append(desc)
+                elif is_target_candidate: relevant_text.append(desc)
+                else: nearby_text.append(desc)
+
+        sections = []
+        if landmarks_text: sections.append("[Fixed Furniture / Map]\n" + "\n".join(sorted(landmarks_text)))
+        if relevant_text: sections.append("[Target Candidates]\n" + "\n".join(sorted(relevant_text)))
+        if nearby_text: sections.append("[Nearby & Visible Items]\n" + "\n".join(sorted(nearby_text)))
+        
+        if not sections: return "(No relevant objects visible)"
+        return "\n\n".join(sections)
+
+
+# ---------- UTILS ----------
 
 def read_json(path: Path) -> Dict[str, Any]:
-    with path.open("r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-def _round_floats_in_obj(obj: Any, ndigits: int = 2) -> Any:
-    """
-    Recursively walk a JSON-like structure (dict/list/primitive) and round
-    floats to `ndigits` decimal places. Returns a new object with the same
-    structure but with floats rounded. Non-float primitives are left as-is.
-
-    Note: This function returns lists/dicts by value (mutable copies) so it's
-    safe to use on parsed JSON structures before further processing.
-    """
-    # primitives
-    if isinstance(obj, float):
-        # round float to given precision
-        # keep as float (e.g. 1.0 -> 1.0)
-        return round(obj, ndigits)
-
-    if isinstance(obj, dict):
-        out = {}
-        for k, v in obj.items():
-            out[k] = _round_floats_in_obj(v, ndigits)
-        return out
-
-    if isinstance(obj, list):
-        return [_round_floats_in_obj(e, ndigits) for e in obj]
-
-    # ints, strings, bools, None remain unchanged
-    return obj
-
+    with path.open("r", encoding="utf-8") as f: return json.load(f)
 
 def write_jsonl(path: Path, rows: List[Dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
-        for row in rows:
-            f.write(json.dumps(row, ensure_ascii=False) + "\n")
-
-
-# ---------- TOOLS + MAPPINGS ----------
+        for row in rows: f.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 def load_tools_and_mappings(tools_path: Path) -> Tuple[List[Dict[str, Any]], Dict[str, Dict[str, Any]]]:
     data = read_json(tools_path)
-    tools = data["tools"]
-    mappings = data["mappings"]["action_idx_to_tool"]
-    return tools, mappings
-
-
-def get_tool_schema_by_action_id(tools: List[Dict[str, Any]], tool_action_id: int) -> Optional[Dict[str, Any]]:
-    for t in tools:
-        if t.get("action_id") == tool_action_id:
-            return t
-    return None
-
+    return data["tools"], data["mappings"]["action_idx_to_tool"]
 
 def get_tool_schema_by_name(tools: List[Dict[str, Any]], tool_name: str) -> Optional[Dict[str, Any]]:
-    """Return the tool schema dict for a given tool name, or None if not found."""
     for t in tools:
-        if t.get("name") == tool_name:
-            return t
+        if t.get("name") == tool_name: return t
     return None
 
-
-# ---------- STATEDIFF 처리 ----------
-
 def parse_statediff_time(path: Path) -> Optional[float]:
-    """
-    statediff.200.98502206802368.json -> 200.98502206802368
-    """
-    name = path.name  # statediff.200.9850.json
-    if not name.startswith("statediff."):
-        return None
-    core = name[len("statediff."):]
-    if core.endswith(".json"):
-        core = core[:-len(".json")]
-    try:
-        return float(core)
-    except ValueError:
-        return None
-
+    if not path.name.startswith("statediff."): return None
+    core = path.name[len("statediff."):].replace(".json", "")
+    try: return float(core)
+    except ValueError: return None
 
 def load_statediff_index(images_dir: Path) -> List[Tuple[float, Path]]:
-    if not images_dir.exists():
-        return []
-    entries: List[Tuple[float, Path]] = []
-    for p in images_dir.glob("statediff*.json"):
-        t = parse_statediff_time(p)
-        if t is not None:
-            entries.append((t, p))
+    if not images_dir.exists(): return []
+    entries = [(parse_statediff_time(p), p) for p in images_dir.glob("statediff*.json") if parse_statediff_time(p) is not None]
     entries.sort(key=lambda x: x[0])
     return entries
 
-
-# ----- Utilities for selecting initial / final state files and filtering -----
-def _extract_object_keys_from_diff(diff: Dict[str, Any]) -> List[str]:
-    """
-    Collect object keys (objectId or name) that appear in a final_state_diff's objects
-    so we can filter the initial_state objects to only those that matter.
-    """
-    obj_keys: List[str] = []
-
-    objects = diff.get("objects")
-    if objects is None:
-        return obj_keys
-
-    if isinstance(objects, dict):
-        obj_keys.extend(list(objects.keys()))
-    elif isinstance(objects, list):
-        for obj in objects:
-            if not isinstance(obj, dict):
-                continue
-            oid = obj.get("objectId") or obj.get("name")
-            if oid:
-                obj_keys.append(oid)
-
-    return sorted(set(obj_keys))
-
-
-def _filter_initial_objects(initial_objects: Any, keys_of_interest: List[str]) -> Any:
-    """
-    From initial_state["objects"], keep only objects that appear in keys_of_interest.
-    Works with both dict and list structures.
-    """
-    if not keys_of_interest:
-        return initial_objects
-
-    key_set = set(keys_of_interest)
-
-    if isinstance(initial_objects, dict):
-        return {k: v for k, v in initial_objects.items() if k in key_set}
-
-    if isinstance(initial_objects, list):
-        filtered = []
-        for obj in initial_objects:
-            if not isinstance(obj, dict):
-                continue
-            oid = obj.get("objectId") or obj.get("name")
-            if oid in key_set:
-                filtered.append(obj)
-        return filtered
-
-    return initial_objects
-
-
-def derive_keys_of_interest_from_turns(turns_list: List[Dict[str, Any]]) -> List[str]:
-    """
-    Walk through episode turns/actions and collect object ids (oids/objectId/etc.)
-    that represent objects directly acted upon. Return a sorted list of unique keys.
-    """
-    keys = set()
-    for t in turns_list:
-        for agg in (t.get("actions", []) or []):
-            raw = agg.get("raw", {}) or {}
-            # Common fields that refer to object ids
-            for kname in ("oid", "objectId", "object_id"):
-                val = raw.get(kname)
-                if not val:
-                    continue
-                if isinstance(val, list):
-                    for v in val:
-                        if v:
-                            keys.add(str(v))
-                else:
-                    keys.add(str(val))
-
-            # arrays or nested dicts (safely search a few likely shapes)
-            for key, v in raw.items():
-                if isinstance(v, list):
-                    for e in v:
-                        if isinstance(e, str) and "|" in e:
-                            keys.add(e)
-                        if isinstance(e, dict):
-                            if e.get("objectId"):
-                                keys.add(str(e.get("objectId")))
-                            if e.get("oid"):
-                                keys.add(str(e.get("oid")))
-                elif isinstance(v, dict):
-                    if v.get("objectId"):
-                        keys.add(str(v.get("objectId")))
-                    if v.get("oid"):
-                        keys.add(str(v.get("oid")))
-
-    return sorted(keys)
-
-
-def build_filtered_initial_state(
-    initial_state_path: Optional[Path], final_state_diff_path: Optional[Path]
-) -> Optional[Dict[str, Any]]:
-    """
-    Read initial_state.json and final_state_diff.json and return a filtered
-    initial_state containing only the objects that appear in the final diff.
-    Returns None if either path is missing.
-    """
-    if initial_state_path is None or final_state_diff_path is None:
-        return None
-
-    if not initial_state_path.exists():
-        print(f"[WARN] initial_state missing: {initial_state_path}")
-        return None
-    if not final_state_diff_path.exists():
-        print(f"[WARN] final_state_diff missing: {final_state_diff_path}")
-        return None
-
-    init = read_json(initial_state_path)
-    final = read_json(final_state_diff_path)
-
-    keys = _extract_object_keys_from_diff(final)
-    filtered_objects = _filter_initial_objects(init.get("objects"), keys)
-
-    out = {
-        "time_start": init.get("time_start"),
-        "agents": init.get("agents"),
-        "objects": filtered_objects,
-    }
-
-    # Round any float values in the returned initial_state for compactness
-    return _round_floats_in_obj(out, ndigits=2)
-
-
-def derive_state_paths_from_edh_fn(edh_fn: Optional[str], split: Optional[str] = None) -> Tuple[Optional[Path], Optional[Path]]:
-    """
-    Given an edh filename (e.g. '/teach_dataset/edh/train/0008f3c95e006303_2053.edh0.json'),
-    derive the initial_state.json and the final statediff.*.json for the scene.
-
-    If `split` is provided ("train"/"val"/"test"), prefer TEACH_ROOT/images/{split}/{scene_id}.
-    Otherwise, search under TEACH_ROOT/images/*/{scene_id}.
-    We pick the final statediff file as the one with the highest frame index.
-    """
-    if not edh_fn:
-        return None, None
-
-    edh_path = Path(edh_fn)
-    stem = edh_path.stem
-    if ".edh" in stem:
-        scene_id = stem.split(".edh")[0]
-    else:
-        scene_id = stem
-
-    # Try the given split first
-    roots: List[Path] = []
-    if split:
-        roots.append(TEACH_ROOT / "images" / split)
-    # fallback: search all splits under images
-    roots.append(TEACH_ROOT / "images")
-
-    initial_state_path: Optional[Path] = None
-    final_state_diff_path: Optional[Path] = None
-    max_frame = -1
-
-    for r in roots:
-        state_dir = r / scene_id
-        if not state_dir.exists():
-            continue
-        cand_init = state_dir / "initial_state.json"
-        if cand_init.exists():
-            initial_state_path = cand_init
-
-        for cand in state_dir.glob("statediff.*.json"):
-            parts = cand.name.split(".")
-            if len(parts) < 3:
-                continue
-            try:
-                frame = int(parts[1])
-            except ValueError:
-                continue
-            if frame > max_frame:
-                max_frame = frame
-                final_state_diff_path = cand
-
-        # if we found anything, stop scanning other candidate roots
-        if initial_state_path or final_state_diff_path:
-            break
-
-    return initial_state_path, final_state_diff_path
-
-
-def find_nearest_statediff(t: float, index: List[Tuple[float, Path]]) -> Optional[Path]:
-    """
-    t 시각과 가장 가까운 statediff.*.json 을 선택.
-    필요하면 여기서 't 이하만 허용' 같은 정책으로 바꿔도 됨.
-    """
-    if not index:
-        return None
-    best_path = None
-    best_dist = math.inf
-    for tt, p in index:
-        d = abs(tt - t)
-        if d < best_dist:
-            best_dist = d
-            best_path = p
-    return best_path
-
-
-# ---------- STATE (pose + objects) BEFORE TURN k ----------
-
-def build_state_before_turn(
-    turn_idx: int,
-    turns: List[Dict[str, Any]],
-    statediff_index: List[Tuple[float, Path]],
-    game_json: Dict[str, Any],
-    keys_of_interest: Optional[List[str]] = None,
-) -> Dict[str, Any]:
-    """
-    turn_idx 번째 턴을 예측할 때 LLM에게 보여줄 '현재 상태'를 계산.
-
-    - turn_idx == 0:
-        game_json["tasks"][0]["episodes"][0]["initial_state"] 사용
-    - turn_idx > 0:
-        바로 이전 턴(turn_idx-1)의 마지막 action 이후 상태
-        (pose + 그 시각과 가장 가까운 statediff.*.json 의 objects)
-    """
-    # Always include the episode's initial_state for the turn
-    initial_state = game_json["tasks"][0]["episodes"][0].get("initial_state", {})
-    # If requested, keep only the objects that are in keys_of_interest
-    if keys_of_interest:
-        try:
-            initial_state_objects = initial_state.get("objects")
-            filtered = _filter_initial_objects(initial_state_objects, keys_of_interest)
-            initial_state = {**initial_state, "objects": filtered}
-        except Exception:
-            pass
-
-    # Default values
-    pose_after_prev = None
-    last_time_prev = None
-
-    # If first turn, there are no prior actions, so no state_diff
-    if turn_idx == 0:
-        # Round floats in the initial state before returning for the dataset
-        return {
-            "initial_state": _round_floats_in_obj(initial_state, ndigits=2),
-            "pose": None,
-            "state_diff": [],
-        }
-
-    # 2) 그 외: 이전 턴 기반
-
-        
-    prev_turn = turns[turn_idx - 1]
-    prev_actions = prev_turn.get("actions", [])
-
-    pose_after_prev = None
-    last_time_prev = None
-
-    for agg in prev_actions:
-        raw = agg.get("raw", {})
-
-        # pose: 가장 최신 raw.pose
-        if "pose" in raw:
-            pose_after_prev = raw["pose"]
-
-        # 시간 후보들 모으기 (압축 action 고려)
-        t_candidates: List[float] = []
-        time_starts = agg.get("time_starts")
-        if time_starts:
-            t_candidates.extend(float(t) for t in time_starts)
-
-        if agg.get("time_start") is not None:
-            t_candidates.append(float(agg["time_start"]))
-        if raw.get("time_start") is not None:
-            t_candidates.append(float(raw["time_start"]))
-
-        if t_candidates:
-            t_max = max(t_candidates)
-            if (last_time_prev is None) or (t_max > last_time_prev):
-                last_time_prev = t_max
-
-
-    # state_diff: pick the single statediff entry nearest to last_time_prev
-    state_diff: Optional[Dict[str, Any]] = None
-    if last_time_prev is None:
-        # no action timestamps found in previous actions
-        pass
-
-    if last_time_prev is not None and statediff_index:
-        # choose the latest statediff with timestamp <= last_time_prev
-        sd_path = None
-        # choose the latest statediff with timestamp <= last_time_prev
-        for tt, p in statediff_index:
-            if tt <= last_time_prev:
-                sd_path = p
-            else:
-                break
-        if sd_path is not None:
-            # selected statediff path available in sd_path
-            try:
-                state_diff = read_json(sd_path)
-                # Filter statediff objects if we have a keys_of_interest list
-                if keys_of_interest and isinstance(state_diff, dict):
-                    try:
-                        objs = state_diff.get("objects")
-                        if isinstance(objs, dict):
-                            allowed = set(keys_of_interest)
-                            state_diff["objects"] = {k: v for k, v in objs.items() if k in allowed}
-                    except Exception:
-                        pass
-            except Exception:
-                state_diff = None
-
-    if last_time_prev is not None and not statediff_index:
-        # last_time_prev available but no statediff candidates were found
-        pass
-
-    # If agents are missing in the selected statediff (or statediff absent), try to
-    # synthesize an agent entry from the previous action pose relative to the
-    # episode initial_state agent.
-    if pose_after_prev is not None:
-        agents_present = False
-        if isinstance(state_diff, dict) and state_diff.get("agents"):
-            agents_present = True
-
-        if not agents_present:
-            try:
-                init_agents = game_json["tasks"][0]["episodes"][0].get("initial_state", {}).get("agents", [])
-            except Exception:
-                init_agents = []
-
-            init_agent = None
-            if isinstance(init_agents, list):
-                for cand in init_agents:
-                    if isinstance(cand, dict) and (cand.get("name") == "agent" or cand.get("cameraHorizon") is not None or cand.get("isStanding") is not None):
-                        init_agent = cand
-                        break
-
-            if init_agent is not None:
-                ipos = init_agent.get("position", {})
-                irot = init_agent.get("rotation", {})
-                cam_horizon = init_agent.get("cameraHorizon", None)
-
-                init_pose = [
-                    float(ipos.get("x", 0.0)),
-                    float(ipos.get("y", 0.0)),
-                    float(ipos.get("z", 0.0)),
-                    float(irot.get("x", 0.0)),
-                    float(cam_horizon if cam_horizon is not None else irot.get("y", 0.0)),
-                    float(irot.get("y", irot.get("z", 0.0))),
-                ]
-
-                pap = pose_after_prev
-                if isinstance(pap, list) and len(pap) >= 6:
-                    pap6 = [float(x) for x in pap[:6]]
-                    pose_delta = [pap6[i] - init_pose[i] for i in range(6)]
-
-                    agent_diff = {
-                        "initial_pose": init_pose,
-                        "pose_after_prev": pap6,
-                        "pose_delta": pose_delta,
-                        "position": {"x": pap6[0], "y": pap6[1], "z": pap6[2]},
-                        "rotation": {"x": pap6[3], "cameraHorizon": pap6[4], "yaw": pap6[5]},
-                    }
-
-                    if state_diff is None:
-                        state_diff = {"agents": {"agent": agent_diff}, "objects": {}}
-                    else:
-                        if not isinstance(state_diff.get("agents"), dict):
-                            state_diff["agents"] = {}
-                        state_diff["agents"].setdefault("agent", agent_diff)
-
-    # Round floats in the returned structures before dataset creation
-    rounded_initial = _round_floats_in_obj(initial_state, ndigits=2)
-    rounded_pose = None
-    if isinstance(pose_after_prev, list):
-        rounded_pose = _round_floats_in_obj(pose_after_prev, ndigits=2)
-    rounded_state_diff = _round_floats_in_obj(state_diff or {}, ndigits=2)
-
-    return {
-        "initial_state": rounded_initial,
-        "pose": rounded_pose,
-        "state_diff": rounded_state_diff,
-    }
-
-
-# ---------- ACTION → TOOL 변환 ----------
-
-def convert_aggregated_action_to_tool_calls(
-    agg: Dict[str, Any],
-    tools: List[Dict[str, Any]],
-    mappings: Dict[str, Dict[str, Any]],
-) -> List[Dict[str, Any]]:
-    """
-    episode_data_wo_state 의 aggregated action 하나를 tool list로 변환.
-    - motion류: motion_delta 하나로 합치되, pose_delta * count 로 net delta 계산
-    - 나머지: count와 상관 없이 1개 tool로 표현 (pickup, place 등)
-    """
+def convert_aggregated_action_to_tool_calls(agg, tools, mappings):
     raw = agg.get("raw", {})
-    # action_idx 우선 사용, fallback 으로 action_id 사용
     idx = raw.get("action_idx", agg.get("action_idx", agg.get("action_id")))
-    if idx is None:
-        # Missing action index: nothing to map to tools
-        return []
-
-    idx_str = str(idx)
-    if idx_str not in mappings:
-        # 매핑 없는 action은 스킵 (필요시 로그 추가 가능)
-        return []
-
-    map_info = mappings[idx_str]
+    if idx is None or str(idx) not in mappings: return []
+    map_info = mappings[str(idx)]
     tool_name = map_info["tool_name"]
-    tool_action_id = map_info["tool_action_id"]
-
-    tool_schema = get_tool_schema_by_action_id(tools, tool_action_id)
-    has_params = bool(tool_schema and tool_schema.get("parameters"))
-
     count = agg.get("count", 1) or 1
-
-    tool_calls: List[Dict[str, Any]] = []
-
     if tool_name == "motion_delta":
-        # pose_delta: [dx, dy, dz, drot_x, drot_y, drot_z]
-        pose_delta = raw.get("pose_delta") or [0, 0, 0, 0, 0, 0]
-        if len(pose_delta) != 6:
-            # 안전하게 길이 보정
-            pose_delta = (pose_delta + [0, 0, 0, 0, 0, 0])[:6]
-
-        # 연속된 motion action이면 하나로 합침: pose_delta * count
-        total_delta = [pose_delta[i] * count for i in range(6)]
-        tool_calls.append({
-            "tool_name": tool_name,
-            "parameters": {
-                "x": total_delta[0],
-                "y": total_delta[1],
-                "z": total_delta[2],
-                "rot_x": total_delta[3],
-                "rot_y": total_delta[4],
-                "rot_z": total_delta[5],
-            }
-        })
+        pose_delta = raw.get("pose_delta") or [0]*6
+        if len(pose_delta) != 6: pose_delta = (pose_delta + [0]*6)[:6]
+        total_delta = [pose_delta[i]*count for i in range(6)]
+        return [{"tool_name": tool_name, "parameters": dict(zip(["x","y","z","rot_x","rot_y","rot_z"], total_delta))}]
     else:
-        # Parameter 없는 tool 이라면 빈 object
-        if not has_params:
-            tool_calls.append({
-                "tool_name": tool_name,
-                "parameters": {}
-            })
-        else:
-            # 나중에 parameter 있는 ProgressCheck 등 다룰 때 확장
-            # 일단은 raw 정보로부터 적당히 복사하거나, 필요 없으면 빈 object
-            tool_calls.append({
-                "tool_name": tool_name,
-                "parameters": {}
-            })
+        return [{"tool_name": tool_name, "parameters": {}}]
 
-    return tool_calls
-
-
-def convert_turn_actions_to_tools(
-    turn_actions: List[Dict[str, Any]],
-    tools: List[Dict[str, Any]],
-    mappings: Dict[str, Dict[str, Any]],
-) -> List[Dict[str, Any]]:
-    """
-    하나의 turn 안에 있는 aggregated actions 전체를 tool list로 변환.
-    """
-    tool_list: List[Dict[str, Any]] = []
-    for agg in turn_actions:
-        tool_list.extend(convert_aggregated_action_to_tool_calls(agg, tools, mappings))
+def convert_turn_actions_to_tools(turn_actions, tools, mappings):
+    tool_list = []
+    for agg in turn_actions: tool_list.extend(convert_aggregated_action_to_tool_calls(agg, tools, mappings))
     return tool_list
 
-
-# ---------- HISTORY 구축 ----------
-
-def build_history_until_turn(
-    edh_json: Dict[str, Any],
-    turns: List[Dict[str, Any]],
-    turn_idx: int,
-    tools: List[Dict[str, Any]],
-    mappings: Dict[str, Dict[str, Any]],
-) -> List[Dict[str, Any]]:
-    """
-    간단 버전:
-    - edh["dialog_history_cleaned"] 전체를 dialogue history로 사용
-    - 이전 turn(0 ~ turn_idx-1)의 action들을 tool list로 변환해 history에 추가
-    """
-    history: List[Dict[str, Any]] = []
-
-    # Build dialogue history only up to (but not including) the current turn.
-    # Prefer turn-local fields (pre_turn_dialogs, commander_context) and action utterances.
+def build_history_until_turn(turns, turn_idx, tools, mappings):
+    history = []
     for t in turns[:turn_idx]:
-        # commander utterances that happened right before this turn
         for cand in (t.get("pre_turn_dialogs") or t.get("commander_context") or t.get("history") or []):
-            if not isinstance(cand, dict):
-                continue
-            # candidate object may have different keys depending on source
+            if not isinstance(cand, dict): continue
             role = "Commander" if int(cand.get("agent_id", 0)) == 0 else "Driver"
             utt = cand.get("corrected_utterance") or cand.get("utterance") or cand.get("query")
-            if utt:
-                history.append({
-                    "type": "dialogue",
-                    "role": role,
-                    "utterance": utt,
-                })
-
-        # driver utterances from actions in this turn
+            if utt: history.append({"type": "dialogue", "role": role, "utterance": utt})
         for agg in t.get("actions", []):
             raw = agg.get("raw", {})
             utt = raw.get("corrected_utterance") or raw.get("utterance")
-            if utt:
-                history.append({
-                    "type": "dialogue",
-                    "role": "Driver",
-                    "utterance": utt,
-                })
-
-    # 2) 이전 turn들의 action history (unchanged behaviour) - only insert Driver turn actions
+            if utt: history.append({"type": "dialogue", "role": "Driver", "utterance": utt})
     for j in range(turn_idx):
         t = turns[j]
-        # Driver turn만 action history에 넣는다 (agent_id == 1)
-        if t.get("agent_id") != 1:
-            continue
-        tool_actions = convert_turn_actions_to_tools(
-            t.get("actions", []),
-            tools,
-            mappings
-        )
-        if not tool_actions:
-            continue
-        history.append({
-            "type": "action",
-            "role": "Driver",
-            "actions": tool_actions
-        })
-
+        if t.get("agent_id") != 1: continue
+        acts = convert_turn_actions_to_tools(t.get("actions", []), tools, mappings)
+        if acts: history.append({"type": "action", "role": "Driver", "actions": acts})
     return history
 
-
-def find_latest_commander_utterance(history: List[Dict[str, Any]]) -> str:
-    """
-    history에서 가장 최근 Commander 발화를 찾는다.
-    """
-    for h in reversed(history):
-        if h.get("type") == "dialogue" and str(h.get("role", "")).lower() == "commander":
-            return h.get("utterance", "")
-    return ""
-
-
-# ---------- LLM INPUT 생성 ----------
-
-def build_llm_input(
-    state_before: Dict[str, Any],
-    tools: List[Dict[str, Any]],
-    history: List[Dict[str, Any]],
-) -> str:
-    """
-    - BASE_PROMPT 에 initial_state / tool_list 채우기
-    - 그 뒤에 history + state_diff를 텍스트로 이어붙여 최종 prompt 생성
-    """
-    # initial_state in BASE_PROMPT should only show the scene's initial_state
-    # Use compact JSON serialization (no indent/newlines) so prompt strings stay short
-    initial_state_text = json.dumps(state_before.get("initial_state", {}), ensure_ascii=False, separators=(",", ":"))
-    tool_list_text = json.dumps(tools, ensure_ascii=False, separators=(",", ":"))
-
-    # Split history into dialogue history (for the dialogue_history placeholder)
-    # and previous action list (for the previous_actions placeholder)
-    dialogue_lines: List[str] = []
-    prev_actions_for_prompt: List[Dict[str, Any]] = []
+def get_accumulated_instructions(history: List[Dict[str, Any]]) -> str:
+    instructions = []
     for h in history:
-        if h["type"] == "dialogue":
-            dialogue_lines.append(f'{h["role"]}: {h["utterance"]}')
-        elif h["type"] == "action":
-            prev_actions_for_prompt.append({"role": h.get("role"), "actions": h.get("actions")})
+        if h.get("type") == "dialogue" and str(h.get("role", "")).lower() == "commander":
+            utt = h.get("utterance", "")
+            if utt:
+                instructions.append(utt)
+    return " ".join(instructions)
 
-    dialogue_history_text = "\n".join(dialogue_lines)
-    previous_actions_text = json.dumps(prev_actions_for_prompt, ensure_ascii=False, separators=(",", ":"))
-    state_diff_text = json.dumps(state_before.get("state_diff", {}), ensure_ascii=False, separators=(",", ":"))
+def build_state_before_turn(turn_idx, turns, statediff_index, game_json):
+    initial_state = game_json["tasks"][0]["episodes"][0].get("initial_state", {})
+    if turn_idx == 0: return {"initial_state": initial_state, "state_diff": {}}
 
-    # Fill all placeholders in the BASE_PROMPT so '{}' slots are correctly populated
+    prev_turn = turns[turn_idx - 1]
+    last_time_prev = None
+    for agg in prev_turn.get("actions", []):
+        raw = agg.get("raw", {})
+        t_vals = [float(x) for x in (agg.get("time_starts") or [])]
+        if agg.get("time_start"): t_vals.append(float(agg["time_start"]))
+        if raw.get("time_start"): t_vals.append(float(raw["time_start"]))
+        if t_vals:
+            t_max = max(t_vals)
+            if last_time_prev is None or t_max > last_time_prev: last_time_prev = t_max
+
+    state_diff = None
+    if last_time_prev is not None and statediff_index:
+        sd_path = None
+        for tt, p in statediff_index:
+            if tt <= last_time_prev: sd_path = p
+            else: break
+        if sd_path:
+            try: state_diff = read_json(sd_path)
+            except: pass
+
+    return {"initial_state": initial_state, "state_diff": state_diff or {}}
+
+# ---------- PROMPT BUILDER ----------
+
+def build_llm_input(state_text: str, tools, history, latest_cmd: str):
+    tool_list_text = json.dumps(tools, ensure_ascii=False)
+    dialogue_lines = []
+    prev_actions = []
+    for h in history:
+        if h["type"] == "dialogue": dialogue_lines.append(f'{h["role"]}: {h["utterance"]}')
+        elif h["type"] == "action": prev_actions.append({"role": h["role"], "actions": h["actions"]})
+    
     head = BASE_PROMPT.format(
-        initial_state=initial_state_text,
-        dialogue_history=dialogue_history_text,
-        previous_actions=previous_actions_text,
-        state_diff=state_diff_text,
+        initial_state=state_text,
+        dialogue_history="\n".join(dialogue_lines) if dialogue_lines else "(No dialogue history)",
+        previous_actions=json.dumps(prev_actions, ensure_ascii=False),
         tool_list=tool_list_text,
     )
-
-    # Build a compact representation of history (dialogue + actions) for the section after the template
-    hist_lines: List[str] = []
+    
+    hist_lines = []
     for h in history:
-        if h["type"] == "dialogue":
-            hist_lines.append(f'{h["role"]}: {h["utterance"]}')
-        elif h["type"] == "action":
-            # keep action list compact in-line
-            hist_lines.append(f'{h["role"]} (actions): {json.dumps(h["actions"], ensure_ascii=False, separators=(",", ":"))}')
-
-    history_text = "\n".join(hist_lines)
-
-    latest_cmd = find_latest_commander_utterance(history)
-
-    # 최종 프롬프트
-    full_input = (
-        head
-        + "\n\n--- Dialogue + Action History ---\n"
-        + history_text
-        + "\n\nCommander: " + latest_cmd + "\n"
-        + "Now decide the next robot actions and respond with a JSON object."
-    )
-    # Normalize whitespace so the prompt doesn't contain excessive indentation
-    # or repeated blank lines that end up in the saved dataset files.
-    # - strip leading/trailing whitespace
-    # - collapse runs of blank-only lines to a single blank line
-    # - strip leading/trailing whitespace on each non-empty line
-    lines = full_input.splitlines()
-    out_lines: List[str] = []
-    seen_blank = False
-    for ln in lines:
-        stripped = ln.strip()
-        if stripped == "":
-            if not seen_blank:
-                out_lines.append("")
-            seen_blank = True
-        else:
-            out_lines.append(stripped)
-            seen_blank = False
-
-    full_input = "\n".join(out_lines).strip()
-    return full_input
+        if h["type"] == "dialogue": hist_lines.append(f'{h["role"]}: {h["utterance"]}')
+        elif h["type"] == "action": hist_lines.append(f'{h["role"]} (actions): {json.dumps(h["actions"], ensure_ascii=False)}')
+        
+    return f"{head}\n\n--- Current Context ---\n" + "\n".join(hist_lines) + \
+           f"\n\nCommander: {latest_cmd}\nNow decide the next robot actions and respond with a JSON object."
 
 
-# ---------- MAIN: EPISODE → DATASET ----------
+# ---------- MAIN LOOP ----------
 
-def build_dataset_from_episode(
-    episode_path: Path,
-    tools: List[Dict[str, Any]],
-    mappings: Dict[str, Dict[str, Any]],
-) -> List[Dict[str, Any]]:
-    """
-    하나의 episode_x.json (episode_data_wo_state)을 여러 sample(turn 단위)로 변환.
-    주의: episode_x.json의 최상위가 dict일 수도 있고 list일 수도 있음.
-          - dict  이면: 그 dict 하나를 하나의 episode로 처리
-          - list 이면: 리스트 안의 각 element(=episode dict)를 순회하며 처리
-    """
+def build_dataset_from_episode(episode_path, tools, mappings, processor):
     ep_raw = read_json(episode_path)
-
-    # 최상위가 list면 여러 episode, dict면 단일 episode로 처리
-    if isinstance(ep_raw, list):
-        episodes = ep_raw
-    else:
-        episodes = [ep_raw]
-
-    # Filter requirement: include only episodes that meet task-level success.
-    # Prefer explicit episode-level flags when available (last_success/all_success/any_success).
-    # Otherwise, fall back to a conservative check:
-    #   - the last action in the last non-empty turn must have last_success==True
-    #   - and there must be NO action anywhere in the episode with last_success==False (explicit failures)
+    episodes = ep_raw if isinstance(ep_raw, list) else [ep_raw]
+    
+    # --- [RESTORED] Episode Filtering Logic ---
     def _episode_task_success(ep: Dict[str, Any]) -> bool:
-        # If the episode includes explicit top-level success flags, prefer them
-        if ep.get("last_success") is not None:
-            return bool(ep.get("last_success"))
-        if ep.get("all_success") is not None:
-            return bool(ep.get("all_success"))
-        if ep.get("any_success") is not None:
-            return bool(ep.get("any_success"))
-
-        # Fallback: check final turn's last aggregated action and ensure no explicit failures exist
+        if ep.get("last_success") is not None: return bool(ep.get("last_success"))
+        if ep.get("all_success") is not None: return bool(ep.get("all_success"))
+        if ep.get("any_success") is not None: return bool(ep.get("any_success"))
+        
         turns = ep.get("turns", [])
-        if not turns:
-            return False
-
-        # find the last turn that has any actions
+        if not turns: return False
+        
         last_turn = None
         for t in reversed(turns):
-            if t.get("actions"):
-                last_turn = t
-                break
-        if last_turn is None:
-            return False
-
-        # find last action in the last_turn with a last_success flag
+            if t.get("actions"): last_turn = t; break
+        if last_turn is None: return False
+        
         last_action = None
         for a in reversed(last_turn.get("actions", [])):
-            if "last_success" in a:
-                last_action = a
-                break
-
-        if last_action is None or not last_action.get("last_success", False):
-            return False
-
-        # exclude episodes with any explicit last_success == False anywhere
+            if "last_success" in a: last_action = a; break
+        
+        if last_action is None or not last_action.get("last_success", False): return False
+        
         for t in turns:
             for a in t.get("actions", []):
-                if a.get("last_success") is False:
-                    return False
-
+                if a.get("last_success") is False: return False
         return True
 
-    # We'll build a new list of kept_episodes using the strongest available check.
-    kept: List[Dict[str, Any]] = []
-    orig_count = len(episodes)
-
     def _episode_contains_move_to(ep: Dict[str, Any]) -> bool:
-        """Return True if any aggregated action in the episode has action_idx/action_id == 1 (Move to)."""
         for t in ep.get("turns", []):
             for agg in t.get("actions", []):
-                raw = agg.get("raw", {}) or {}
+                raw = agg.get("raw", {})
                 idx = raw.get("action_idx", agg.get("action_idx", agg.get("action_id")))
-                # robust check for numeric or string index
                 try:
-                    if int(idx) == 1:
-                        return True
-                except Exception:
-                    if str(idx) == "1":
-                        return True
+                    if int(idx) == 1: return True # Move to
+                except:
+                    if str(idx) == "1": return True
         return False
 
+    kept = []
     for e in episodes:
-        # Exclude any episode that contains a ground-truth 'Move to' action (action_idx == 1)
-        if _episode_contains_move_to(e):
-            print(f"[INFO] skipping episode {e.get('edh_fn') or e.get('game_fn') or 'unknown'}: contains Move to ground-truth action")
-            continue
-        # By default, prefer using TEACh state-diff based check (most accurate) when utilities and files exist.
+        if _episode_contains_move_to(e): continue
+        
         edh_path = Path(e.get("edh_fn")) if e.get("edh_fn") else None
         game_path = Path(e.get("game_fn")) if e.get("game_fn") else None
-
+        
         used_state_check = False
         if _HAS_TEACH_UTILS and edh_path and edh_path.exists() and game_path and game_path.exists():
             try:
                 edh_json = read_json(edh_path)
                 game_json = read_json(game_path)
                 state_changes = edh_json.get("state_changes")
-                # final_state might be stored in game_json under tasks[0].episodes[0].final_state
                 fin_ep = None
-                try:
-                    fin_ep = game_json["tasks"][0]["episodes"][0].get("final_state")
-                except Exception:
-                    fin_ep = None
-
+                try: fin_ep = game_json["tasks"][0]["episodes"][0].get("final_state")
+                except: fin_ep = None
+                
                 if state_changes and fin_ep and fin_ep.get("objects"):
                     task_obj = create_task_thor_from_state_diff(state_changes)
                     final_objs = update_objs_with_custom_metadata(fin_ep.get("objects", []), fin_ep.get("custom_object_metadata", {}))
                     progress = task_obj.check_episode_progress(final_objs)
-                    if progress and progress.get("success"):
-                        kept.append(e)
-                    # if progress indicates failure, skip episode
+                    if progress and progress.get("success"): kept.append(e)
                     used_state_check = True
-            except Exception:
-                # If any error occurs during TEACh-based check, fall back to heuristics below
-                used_state_check = False
-
-        if used_state_check:
-            continue
-
-        # Fallback to previous episode-level heuristics
-        if _episode_task_success(e):
-            kept.append(e)
-
+            except: used_state_check = False
+        
+        if used_state_check: continue
+        
+        if _episode_task_success(e): kept.append(e)
+    
     episodes = kept
-    if len(episodes) != orig_count:
-        print(f"[INFO] filtered out {orig_count - len(episodes)} episode(s) that didn't meet task-level success criteria")
+    # ------------------------------------------
 
-    all_samples: List[Dict[str, Any]] = []
+    all_samples = []
 
     for ep in episodes:
         edh_path = Path(ep["edh_fn"])
         game_path = Path(ep["game_fn"])
-
-        edh_json = read_json(edh_path)
-        game_json = read_json(game_path)
-
-        # images 폴더: /teach_dataset/images/{split}/{game_id}/
-        # game_fn: /teach_dataset/games/train/0008f3c95e006303_2053.game.json
-        split = game_path.parent.name  # "train"
-        game_id = game_path.stem       # may be e.g. "001296256b543d60_11e0.game" or "0008f3c95e006303_2053"
-        # If game files are named with a .game.json suffix, remove the extra '.game' stem
-        if game_id.endswith(".game"):
-            game_id = game_id[: -len(".game")]
+        split = game_path.parent.name
+        game_id = game_path.stem.replace(".game", "")
+        
         images_dir = TEACH_ROOT / "images" / split / game_id
         statediff_index = load_statediff_index(images_dir)
-        # debug prints removed (candidates suppressed to keep output clean)
-
-        # We'll always include the episode/game initial_state (no filtering by final_state_diff)
-        filtered_initial_state = game_json.get("initial_state")
-        # We no longer load or attach final_state_diff (we instead build state_diff up to the turn in build_state_before_turn)
-        final_state_diff_json = None
-
+        game_json = read_json(game_path)
         turns = ep.get("turns", [])
-        game_id_full = ep.get("game_id", game_id)
-
-        # derive keys_of_interest for the episode: union of object ids referenced by any action
-        keys_of_interest_episode = derive_keys_of_interest_from_turns(turns)
 
         for k, turn in enumerate(turns):
-            # Driver가 아닌 턴은 스킵
-            if turn.get("agent_id") != 1:
-                continue
+            if turn.get("agent_id") != 1: continue 
 
-            # 1) 이 턴 직전 상태
-            # For the per-turn state, we filter to only objects relevant to the episode
-            state_before = build_state_before_turn(
-                turn_idx=k,
-                turns=turns,
-                statediff_index=statediff_index,
-                game_json=game_json,
-                keys_of_interest=keys_of_interest_episode,
-            )
-
-            # 2) history (dialogue + 이전 actions)
-            history = build_history_until_turn(
-                edh_json=edh_json,
-                turns=turns,
-                turn_idx=k,
-                tools=tools,
-                mappings=mappings,
-            )
-
-            # 3) 정답 action (현재 턴의 aggregated actions → tool list)
-            gt_actions = convert_turn_actions_to_tools(
-                turn.get("actions", []),
-                tools,
-                mappings,
-            )
-
-            # 4) LLM input prompt
-            llm_input = build_llm_input(
-                state_before=state_before,
-                tools=tools,
-                history=history,
-            )
-
-            # Minimal sample fields required by the user:
-            # only 'game_id', 'instance_id', 'turn_index', 'prompt', 'answer'
-            # add: 'turn_last_success' boolean reflecting this turn's last aggregated action result
-            turn_actions = turn.get("actions", [])
-            turn_last_success = False
-            if turn_actions:
-                for a in reversed(turn_actions):
-                    if "last_success" in a:
-                        turn_last_success = bool(a.get("last_success"))
+            state_before = build_state_before_turn(k, turns, statediff_index, game_json)
+            history = build_history_until_turn(turns, k, tools, mappings)
+            
+            # Get Current Command
+            current_cmd = ""
+            dialog_candidates = (turn.get("pre_turn_dialogs") or 
+                                 turn.get("commander_context") or 
+                                 turn.get("history") or [])
+            for cand in dialog_candidates:
+                if isinstance(cand, dict):
+                    role = "Commander" if int(cand.get("agent_id", 0)) == 0 else "Driver"
+                    if role == "Commander":
+                        current_cmd = cand.get("corrected_utterance") or cand.get("utterance") or cand.get("query") or ""
                         break
+            
+            past_instructions = get_accumulated_instructions(history)
+            full_instruction_context = f"{past_instructions} {current_cmd}".strip()
+            
+            if current_cmd: latest_instruction_for_prompt = current_cmd
+            else:
+                last_h = ""
+                for h in reversed(history):
+                    if h["type"] == "dialogue" and h["role"] == "Commander":
+                        last_h = h["utterance"]; break
+                latest_instruction_for_prompt = last_h
+            
+            # MERGE LOGIC (Using .copy and .update)
+            merged_objects_map = {
+                obj.get("objectId", f"UNK_{i}"): obj.copy() 
+                for i, obj in enumerate(state_before["initial_state"].get("objects", []))
+            }
+            
+            if state_before.get("state_diff"):
+                diff_objs = state_before["state_diff"].get("objects", {})
+                
+                def update_map(oid, new_data):
+                    if oid not in merged_objects_map:
+                        merged_objects_map[oid] = new_data
+                    else:
+                        merged_objects_map[oid].update(new_data)
 
-            # compute answer action-type flag: True if answer is empty OR all actions
-            # have action_type in {"Motion","ObjectInteraction"}
-            def _answer_actions_are_motion_or_objectinteraction(actions: List[Dict[str, Any]]) -> bool:
-                if not actions:
-                    return True
-                allowed = {"Motion", "ObjectInteraction"}
-                for a in actions:
-                    tname = a.get("tool_name")
-                    schema = get_tool_schema_by_name(tools, tname)
-                    atype = schema.get("action_type") if schema else None
-                    if atype not in allowed:
-                        return False
+                if isinstance(diff_objs, list):
+                    for obj in diff_objs:
+                        if "objectId" in obj: update_map(obj["objectId"], obj)
+                elif isinstance(diff_objs, dict):
+                    for oid, obj in diff_objs.items():
+                        current_oid = obj.get("objectId", oid)
+                        update_map(current_oid, obj)
+            
+            merged_state = {
+                "agents": state_before["state_diff"].get("agents") or state_before["initial_state"].get("agents"),
+                "objects": list(merged_objects_map.values())
+            }
+
+            # Process
+            abstracted_state_text = processor.process_state(merged_state, full_instruction_context)
+            
+            llm_input = build_llm_input(abstracted_state_text, tools, history, latest_instruction_for_prompt)
+            gt_actions = convert_turn_actions_to_tools(turn.get("actions", []), tools, mappings)
+            
+            def _check_actions_type(acts):
+                for a in acts:
+                    t = get_tool_schema_by_name(tools, a["tool_name"])
+                    if t and t.get("action_type") not in ["Motion", "ObjectInteraction"]: return False
                 return True
 
-            answer_flag = _answer_actions_are_motion_or_objectinteraction(gt_actions)
+            turn_last_success = False
+            if turn.get("actions"):
+                last_agg = turn["actions"][-1]
+                if "last_success" in last_agg:
+                    turn_last_success = bool(last_agg["last_success"])
 
-            sample = {
-                "game_id": game_id_full,
-                "instance_id": edh_json.get("instance_id"),
+            all_samples.append({
+                "game_id": ep.get("game_id", game_id),
+                "instance_id": ep.get("instance_id"),
                 "turn_index": k,
                 "prompt": llm_input,
-                "answer": {
-                    "actions": gt_actions
-                },
-                "answer_all_motion_or_objectinteraction": answer_flag,
+                "answer": {"actions": gt_actions},
+                "answer_all_motion_or_objectinteraction": _check_actions_type(gt_actions),
                 "turn_last_success": turn_last_success,
-                # include the split so callers can write outputs grouped per-split
-                "_split": split,
-            }
-            all_samples.append(sample)
+                "_split": split
+            })
 
     return all_samples
 
-
 def main():
     args = parse_args()
-
+    
+    print(f"[INFO] Initializing Context Processor (Mode: {args.filter_mode})...")
+    processor = ContextProcessor(mode=args.filter_mode, model_name=args.embedding_model)
+    
     EPISODE_ROOT = Path(args.episode_root)
     OUTPUT_ROOT = Path(args.output_root)
     OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
-
+    
     tools, mappings = load_tools_and_mappings(TOOLS_JSON)
-
-    total_samples = 0
-    # accumulator for per-split / per-task summary statistics
-    SUMMARY: Dict[str, Any] = {}
-
-    # 사용할 task 디렉토리 결정
+    
     if args.task_ids is None:
         task_dirs = sorted(EPISODE_ROOT.glob("task_*"))
     else:
-        ids = [x.strip() for x in args.task_ids.split(",") if x.strip() != ""]
-        task_dirs = []
-        for tid in ids:
-            task_dir = EPISODE_ROOT / f"task_{tid}"
-            if task_dir.exists():
-                task_dirs.append(task_dir)
-            else:
-                print(f"[WARN] task_{tid} not found: {task_dir}")
+        ids = [x.strip() for x in args.task_ids.split(",") if x.strip()]
+        task_dirs = [EPISODE_ROOT / f"task_{tid}" for tid in ids]
 
-    # task / episode 별로 각각 jsonl 파일 생성
+    print(f"[INFO] Scanning episode files in {len(task_dirs)} task directories...")
+    all_episode_files = []
     for task_dir in task_dirs:
-        task_name = task_dir.name  # 예: "task_0"
-        for ep_path in sorted(task_dir.glob("episode_*.json")):
-            print(f"[INFO] Processing episode: {ep_path}")
+        if task_dir.exists():
+            files = sorted(task_dir.glob("episode_*.json"))
+            all_episode_files.extend(files)
+    
+    print(f"[INFO] Found {len(all_episode_files)} episodes. Starting generation...")
 
-            ep_samples = build_dataset_from_episode(ep_path, tools, mappings)
-            total_samples += len(ep_samples)
-            if not ep_samples:
-                print(f"[INFO]   -> Skipping {ep_path.name}: no samples after filtering (no output file created)")
-                continue
+    for ep_path in tqdm(all_episode_files, desc=f"[{args.filter_mode}] Generating", unit="ep"):
+        ep_samples = build_dataset_from_episode(ep_path, tools, mappings, processor)
+        if not ep_samples: continue
 
-            # We'll write outputs only into split-specific directories: OUTPUT_ROOT/{split}/{task_name}/
-            # Group samples by split so we can write to OUTPUT_ROOT/{split}/{task_name}/...
-            samples_by_split = {}
-            for s in ep_samples:
-                sp = s.get("_split", "unknown")
-                samples_by_split.setdefault(sp, []).append(s)
-
-            for sp, samples in samples_by_split.items():
-                split_out_dir = OUTPUT_ROOT / sp / task_name
-                split_out_dir.mkdir(parents=True, exist_ok=True)
-
-                # If the episode file only contains a single split, keep the original filename.
-                # If multiple splits are present in the same episode file, suffix the filename with the split
-                # to avoid clobbering different-split outputs.
-                filename = f"{ep_path.stem}.jsonl" if len(samples_by_split) == 1 else f"{ep_path.stem}.{sp}.jsonl"
-                split_out_path = split_out_dir / filename
-                write_jsonl(split_out_path, samples)
-                print(f"[INFO]   -> Saved {len(samples)} samples to {split_out_path}")
-
-                # -----------------
-                # Per-episode statistics
-                # Count how many samples in this episode/split have both flags True
-                both_true_count = 0
-                for s in samples:
-                    if bool(s.get("answer_all_motion_or_objectinteraction")) and bool(s.get("turn_last_success")):
-                        both_true_count += 1
-
-                # We count per-episode 'both flags true' and accumulate into SUMMARY,
-                # but we no longer write per-episode stats files to avoid clutter.
-
-                # accumulate global summary across this run (per-split only)
-                summary_for_split = SUMMARY.setdefault(sp, {"total_samples": 0, "both_flags_true": 0})
-                summary_for_split["total_samples"] += len(samples)
-                summary_for_split["both_flags_true"] += both_true_count
-
-    # After processing all episodes, write out a summary JSON per split and an overall summary
-    # Write a single consolidated summary file containing overall totals and
-    # per-split breakdowns (including per-task values within each split).
-    if SUMMARY:
-        # Compute overall aggregates across splits
-        overall = {"total_samples": 0, "both_flags_true": 0}
-        for sp, vals in SUMMARY.items():
-            overall["total_samples"] += int(vals.get("total_samples", 0))
-            overall["both_flags_true"] += int(vals.get("both_flags_true", 0))
-
-        consolidated = {
-            "overall": overall,
-            "per_split": SUMMARY,
-        }
-
-        summary_path = OUTPUT_ROOT / "summary.json"
-        with summary_path.open("w", encoding="utf-8") as sf:
-            json.dump(consolidated, sf, ensure_ascii=False, indent=2)
-        print(f"[INFO] Wrote consolidated summary to {summary_path}")
-
-    print(f"[INFO] Total samples across all episodes: {total_samples}")
-
-
+        task_name = ep_path.parent.name 
+        samples_by_split = {}
+        for s in ep_samples: samples_by_split.setdefault(s["_split"], []).append(s)
+        
+        for sp, samples in samples_by_split.items():
+            out_dir = OUTPUT_ROOT / sp / task_name
+            out_dir.mkdir(parents=True, exist_ok=True)
+            write_jsonl(out_dir / f"{ep_path.stem}.jsonl", samples)
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,285 @@
+{
+  "version": "tool-schema-v1",
+  "simulator": "THOR",
+  "source_files": [
+    "src/teach/meta_data_files/default_definitions.json",
+    "src/teach/meta_data_files/ai2thor_resources/action_idx_to_action_name.json",
+    "src/teach/meta_data_files/ai2thor_resources/action_to_action_idx.json"
+  ],
+
+  "tools": [
+    {
+      "name": "Stop",
+      "action_id": 0,
+      "action_type": "Motion",
+      "description": "Immediately stop all ongoing motion of the agent.",
+      "parameters": {}
+    },
+
+
+    {
+      "name": "motion_delta",
+      "action_id": 2,
+      "action_type": "Motion",
+      "description": "Move or rotate the agent by applying a 6-DoF pose delta [x, y, z, rot_x, rot_y, rot_z].\n\nTranslation (continuous):\n- x > 0 → move forward\n- x < 0 → move backward\n- y > 0 → strafe left\n- y < 0 → strafe right\n- z > 0 → move up\n- z < 0 → move down\n\nRotation (discrete values):\n- rot_z = +90 → turn left\n- rot_z = -90 → turn right\n- rot_y = -30 → look up\n- rot_y = +30 → look down\n\nTranslation values (x, y, z) may take any real number.\nRotation values (rot_y, rot_z) should use the discrete values shown above.\nrot_x is typically unused.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "x": { "type": "number" },
+          "y": { "type": "number" },
+          "z": { "type": "number" },
+          "rot_x": { "type": "number" },
+          "rot_y": { "type": "number" },
+          "rot_z": { "type": "number" }
+        }
+      }
+    },
+
+    {
+      "name": "Navigation",
+      "action_id": 300,
+      "action_type": "MapGoal",
+      "description": "Navigate to a target position on the environment map using the built-in navigation system. The agent's current position is used as the starting point.",
+      "parameters": {}
+    },
+
+    {
+      "name": "Pickup",
+      "action_id": 200,
+      "action_type": "ObjectInteraction",
+      "description": "Pick up a target object in the agent's view. The object must be visible and support pickup.",
+      "parameters": {}
+    },
+
+    {
+      "name": "Place",
+      "action_id": 201,
+      "action_type": "ObjectInteraction",
+      "description": "Place the object currently held by the agent at a suitable nearby location in the environment. The agent must be holding an object before using this action.",
+      "parameters": {}
+    },
+
+    {
+      "name": "Open",
+      "action_id": 202,
+      "action_type": "ObjectInteraction",
+      "description": "Open an openable object such as a drawer, cabinet, or door in the agent's view.",
+      "parameters": {}
+    },
+
+    {
+      "name": "Close",
+      "action_id": 203,
+      "action_type": "ObjectInteraction",
+      "description": "Close an openable object that is currently open.",
+      "parameters": {}
+    },
+
+    {
+      "name": "ToggleOn",
+      "action_id": 204,
+      "action_type": "ObjectInteraction",
+      "description": "Turn on an interactable device or appliance, such as a light or switch.",
+      "parameters": {}
+    },
+
+    {
+      "name": "ToggleOff",
+      "action_id": 205,
+      "action_type": "ObjectInteraction",
+      "description": "Turn off an interactable device or appliance.",
+      "parameters": {}
+    },
+
+    {
+      "name": "Slice",
+      "action_id": 206,
+      "action_type": "ObjectInteraction",
+      "description": "Slice a target object using a suitable tool. The agent must be holding a slicing tool such as a knife.",
+      "parameters": {}
+    },
+
+    {
+      "name": "Dirty",
+      "action_id": 207,
+      "action_type": "ObjectInteraction",
+      "description": "Mark a target object as dirty.",
+      "parameters": {}
+    },
+
+    {
+      "name": "Clean",
+      "action_id": 208,
+      "action_type": "ObjectInteraction",
+      "description": "Clean a target object.",
+      "parameters": {}
+    },
+
+    {
+      "name": "Fill",
+      "action_id": 209,
+      "action_type": "ObjectInteraction",
+      "description": "Fill a container object with liquid.",
+      "parameters": {}
+    },
+
+    {
+      "name": "Empty",
+      "action_id": 210,
+      "action_type": "ObjectInteraction",
+      "description": "Empty the contents of a container object.",
+      "parameters": {}
+    },
+
+    {
+      "name": "Pour",
+      "action_id": 211,
+      "action_type": "ObjectInteraction",
+      "description": "Pour liquid from the object currently held by the agent onto a target object or location. The held object must contain liquid.",
+      "parameters": {}
+    },
+
+    {
+      "name": "Break",
+      "action_id": 212,
+      "action_type": "ObjectInteraction",
+      "description": "Break or damage a target object.",
+      "parameters": {}
+    },
+
+    {
+      "name": "BehindAboveOn",
+      "action_id": 400,
+      "action_type": "ChangeCamera",
+      "description": "Switch the camera to a third-person behind-and-above perspective.",
+      "parameters": {}
+    },
+
+    {
+      "name": "BehindAboveOff",
+      "action_id": 401,
+      "action_type": "ChangeCamera",
+      "description": "Switch the camera back to first-person view.",
+      "parameters": {}
+    },
+
+    {
+      "name": "OpenProgressCheck",
+      "action_id": 500,
+      "action_type": "ProgressCheck",
+      "description": "Retrieve the agent's current task progress, including subgoals and completion status.",
+      "parameters": {}
+    },
+
+    {
+      "name": "SelectOid",
+      "action_id": 501,
+      "action_type": "ProgressCheck",
+      "description": "Select or highlight an object based on a query string or object identifier.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string" }
+        }
+      }
+    },
+
+    {
+      "name": "SearchObject",
+      "action_id": 502,
+      "action_type": "ProgressCheck",
+      "description": "Search for an object using a query string and focus the view on the best matching target.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string" }
+        }
+      }
+    },
+
+    {
+      "name": "Text",
+      "action_id": 100,
+      "action_type": "Keyboard",
+      "description": "Send a text message or annotation as part of the interaction.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "utterance": { "type": "string" }
+        }
+      }
+    },
+
+    {
+      "name": "Speech",
+      "action_id": 101,
+      "action_type": "Audio",
+      "description": "Play a recorded or synthesized speech message. The message may be provided as text or an audio file.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "utterance": { "type": "string" },
+          "file_name": { "type": "string" }
+        }
+      }
+    },
+
+    {
+      "name": "Beep",
+      "action_id": 102,
+      "action_type": "Audio",
+      "description": "Play a beep sound. This action always plays three beeps.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "repeat": { "type": "integer" }
+        }
+      }
+    }
+  ],
+
+  "mappings": {
+    "action_idx_to_tool": {
+      "0":  { "original_name": "Stop",            "tool_name": "Stop",          "tool_action_id": 0   },
+      "2":  { "original_name": "Forward",         "tool_name": "motion_delta",  "tool_action_id": 2   },
+      "3":  { "original_name": "Backward",        "tool_name": "motion_delta",  "tool_action_id": 2   },
+      "4":  { "original_name": "Turn Left",       "tool_name": "motion_delta",  "tool_action_id": 2   },
+      "5":  { "original_name": "Turn Right",      "tool_name": "motion_delta",  "tool_action_id": 2   },
+      "6":  { "original_name": "Look Up",         "tool_name": "motion_delta",  "tool_action_id": 2   },
+      "7":  { "original_name": "Look Down",       "tool_name": "motion_delta",  "tool_action_id": 2   },
+      "8":  { "original_name": "Pan Left",        "tool_name": "motion_delta",  "tool_action_id": 2   },
+      "9":  { "original_name": "Pan Right",       "tool_name": "motion_delta",  "tool_action_id": 2   },
+      "10": { "original_name": "Move Up",         "tool_name": "motion_delta",  "tool_action_id": 2   },
+      "11": { "original_name": "Move Down",       "tool_name": "motion_delta",  "tool_action_id": 2   },
+      "12": { "original_name": "Double Forward",  "tool_name": "motion_delta",  "tool_action_id": 2   },
+      "13": { "original_name": "Double Backward", "tool_name": "motion_delta",  "tool_action_id": 2   },
+
+      "14": { "original_name": "Navigation",      "tool_name": "Navigation",    "tool_action_id": 300 },
+
+      "15": { "original_name": "Pickup",          "tool_name": "Pickup",        "tool_action_id": 200 },
+      "16": { "original_name": "Place",           "tool_name": "Place",         "tool_action_id": 201 },
+      "17": { "original_name": "Open",            "tool_name": "Open",          "tool_action_id": 202 },
+      "18": { "original_name": "Close",           "tool_name": "Close",         "tool_action_id": 203 },
+      "19": { "original_name": "ToggleOn",        "tool_name": "ToggleOn",      "tool_action_id": 204 },
+      "20": { "original_name": "ToggleOff",       "tool_name": "ToggleOff",     "tool_action_id": 205 },
+      "21": { "original_name": "Slice",           "tool_name": "Slice",         "tool_action_id": 206 },
+      "22": { "original_name": "Dirty",           "tool_name": "Dirty",         "tool_action_id": 207 },
+      "23": { "original_name": "Clean",           "tool_name": "Clean",         "tool_action_id": 208 },
+      "24": { "original_name": "Fill",            "tool_name": "Fill",          "tool_action_id": 209 },
+      "25": { "original_name": "Empty",           "tool_name": "Empty",         "tool_action_id": 210 },
+      "26": { "original_name": "Pour",            "tool_name": "Pour",          "tool_action_id": 211 },
+      "27": { "original_name": "Break",           "tool_name": "Break",         "tool_action_id": 212 },
+
+      "28": { "original_name": "BehindAboveOn",   "tool_name": "BehindAboveOn", "tool_action_id": 400 },
+      "29": { "original_name": "BehindAboveOff",  "tool_name": "BehindAboveOff","tool_action_id": 401 },
+
+      "30": { "original_name": "OpenProgressCheck","tool_name": "OpenProgressCheck","tool_action_id": 500 },
+      "31": { "original_name": "SelectOid",       "tool_name": "SelectOid",     "tool_action_id": 501 },
+      "32": { "original_name": "SearchObject",    "tool_name": "SearchObject",  "tool_action_id": 502 },
+
+      "33": { "original_name": "Text",            "tool_name": "Text",          "tool_action_id": 100 },
+      "34": { "original_name": "Speech",          "tool_name": "Speech",        "tool_action_id": 101 },
+      "35": { "original_name": "Beep",            "tool_name": "Beep",          "tool_action_id": 102 }
+    }
+  }
+}

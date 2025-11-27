@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+
+# processed data
+processed_dataset/
+
+# episode data without state
+episode_data_wo_state/

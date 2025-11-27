@@ -1,0 +1,3648 @@
+{
+  "edh_fn": "/teach_dataset/edh_instances/train/0008f3c95e006303_2053.edh0.json",
+  "game_id": "0008f3c95e006303",
+  "game_fn": "/teach_dataset/games/train/0008f3c95e006303_2053.game.json",
+  "edh": {
+    "dialog_history": [
+      [
+        "Commander",
+        "Good day!  We are preparing breakfast.  We first need to wash a dirty mug."
+      ]
+    ],
+    "driver_action_history": [],
+    "driver_image_history": [],
+    "driver_actions_future": [
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 72.49418449401855,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 73.01422500610352,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 73.36088943481445,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 74.26896262168884,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 74.56517672538757,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 74.8025472164154,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 74.9824378490448,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 75.14844965934753,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 4,
+        "action_idx": 4,
+        "obj_interaction_action": 0,
+        "action_name": "Turn Left",
+        "time_start": 75.96460771560669,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 79.30943131446838,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 79.64453387260437,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 80.02185988426208,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 80.29819130897522,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 80.65819597244263,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 80.82660031318665,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 80.9943687915802,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 5,
+        "action_idx": 5,
+        "obj_interaction_action": 0,
+        "action_name": "Turn Right",
+        "time_start": 83.70984768867493,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 5,
+        "action_idx": 5,
+        "obj_interaction_action": 0,
+        "action_name": "Turn Right",
+        "time_start": 85.9174530506134,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 8,
+        "action_idx": 8,
+        "obj_interaction_action": 0,
+        "action_name": "Pan Left",
+        "time_start": 88.13292503356934,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 8,
+        "action_idx": 8,
+        "obj_interaction_action": 0,
+        "action_name": "Pan Left",
+        "time_start": 88.55967974662781,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 8,
+        "action_idx": 8,
+        "obj_interaction_action": 0,
+        "action_name": "Pan Left",
+        "time_start": 88.94492936134338,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 8,
+        "action_idx": 8,
+        "obj_interaction_action": 0,
+        "action_name": "Pan Left",
+        "time_start": 89.32522559165955,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 8,
+        "action_idx": 8,
+        "obj_interaction_action": 0,
+        "action_name": "Pan Left",
+        "time_start": 89.60417485237122,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 8,
+        "action_idx": 8,
+        "obj_interaction_action": 0,
+        "action_name": "Pan Left",
+        "time_start": 89.78232622146606,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 8,
+        "action_idx": 8,
+        "obj_interaction_action": 0,
+        "action_name": "Pan Left",
+        "time_start": 90.00286221504211,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 8,
+        "action_idx": 8,
+        "obj_interaction_action": 0,
+        "action_name": "Pan Left",
+        "time_start": 98.04963207244873,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 99.4287703037262,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 100.02158403396606,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 100.34013772010803,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 100.74442267417908,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 103.44409799575806,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 105.15599179267883,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 4,
+        "action_idx": 4,
+        "obj_interaction_action": 0,
+        "action_name": "Turn Left",
+        "time_start": 108.05310535430908,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 110.68426752090454,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 110.9509711265564,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 111.17534112930298,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 111.46380114555359,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 111.67392063140869,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 111.87780666351318,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 112.2890682220459,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 4,
+        "action_idx": 4,
+        "obj_interaction_action": 0,
+        "action_name": "Turn Left",
+        "time_start": 113.0441026687622,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 115.6451199054718,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 115.84444665908813,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 116.05454707145691,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 116.28700995445251,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 200,
+        "action_idx": 15,
+        "obj_interaction_action": 1,
+        "action_name": "Pickup",
+        "time_start": 124.6079511642456,
+        "oid": "Mug|-02.43|+00.59|+00.17",
+        "x": 0.30828025477707005,
+        "y": 0.9286624203821656
+      },
+      {
+        "action_id": 4,
+        "action_idx": 4,
+        "obj_interaction_action": 0,
+        "action_name": "Turn Left",
+        "time_start": 126.47652053833008,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 8,
+        "action_idx": 8,
+        "obj_interaction_action": 0,
+        "action_name": "Pan Left",
+        "time_start": 128.613285779953,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 8,
+        "action_idx": 8,
+        "obj_interaction_action": 0,
+        "action_name": "Pan Left",
+        "time_start": 129.79622220993042,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 8,
+        "action_idx": 8,
+        "obj_interaction_action": 0,
+        "action_name": "Pan Left",
+        "time_start": 130.3209466934204,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 132.04451298713684,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 132.28379154205322,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 132.46033906936646,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 132.65637683868408,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 132.8112313747406,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 132.9639744758606,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 133.16704082489014,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 133.35082340240479,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 133.55103707313538,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 5,
+        "action_idx": 5,
+        "obj_interaction_action": 0,
+        "action_name": "Turn Right",
+        "time_start": 134.23623061180115,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 5,
+        "action_idx": 5,
+        "obj_interaction_action": 0,
+        "action_name": "Turn Right",
+        "time_start": 134.45159912109375,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 4,
+        "action_idx": 4,
+        "obj_interaction_action": 0,
+        "action_name": "Turn Left",
+        "time_start": 136.7241494655609,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 139.4366545677185,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 139.69437718391418,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 140.06832933425903,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 140.2857210636139,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 140.6521279811859,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 140.81592917442322,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 141.0300736427307,
+        "oid": null,
+        "x": null,
+        "y": null
+      },
+      {
+        "action_id": 2,
+        "action_idx": 2,
+        "obj_interaction_action": 0,
+        "action_name": "Forward",
+        "time_start": 141.277934551239,
+        "oid": null,
+        "x": null,
+        "y": null
+      }
+    ],
+    "driver_images_future": [
+      "driver.frame.72.49418449401855.jpeg",
+      "driver.frame.73.01422500610352.jpeg",
+      "driver.frame.73.36088943481445.jpeg",
+      "driver.frame.74.26896262168884.jpeg",
+      "driver.frame.74.56517672538757.jpeg",
+      "driver.frame.74.8025472164154.jpeg",
+      "driver.frame.74.9824378490448.jpeg",
+      "driver.frame.75.14844965934753.jpeg",
+      "driver.frame.75.96460771560669.jpeg",
+      "driver.frame.79.30943131446838.jpeg",
+      "driver.frame.79.64453387260437.jpeg",
+      "driver.frame.80.02185988426208.jpeg",
+      "driver.frame.80.29819130897522.jpeg",
+      "driver.frame.80.65819597244263.jpeg",
+      "driver.frame.80.82660031318665.jpeg",
+      "driver.frame.80.9943687915802.jpeg",
+      "driver.frame.83.70984768867493.jpeg",
+      "driver.frame.85.9174530506134.jpeg",
+      "driver.frame.88.13292503356934.jpeg",
+      "driver.frame.88.55967974662781.jpeg",
+      "driver.frame.88.94492936134338.jpeg",
+      "driver.frame.89.32522559165955.jpeg",
+      "driver.frame.89.60417485237122.jpeg",
+      "driver.frame.89.78232622146606.jpeg",
+      "driver.frame.90.00286221504211.jpeg",
+      "driver.frame.98.04963207244873.jpeg",
+      "driver.frame.99.4287703037262.jpeg",
+      "driver.frame.100.02158403396606.jpeg",
+      "driver.frame.100.34013772010803.jpeg",
+      "driver.frame.100.74442267417908.jpeg",
+      "driver.frame.103.44409799575806.jpeg",
+      "driver.frame.105.15599179267883.jpeg",
+      "driver.frame.108.05310535430908.jpeg",
+      "driver.frame.110.68426752090454.jpeg",
+      "driver.frame.110.9509711265564.jpeg",
+      "driver.frame.111.17534112930298.jpeg",
+      "driver.frame.111.46380114555359.jpeg",
+      "driver.frame.111.67392063140869.jpeg",
+      "driver.frame.111.87780666351318.jpeg",
+      "driver.frame.112.2890682220459.jpeg",
+      "driver.frame.113.0441026687622.jpeg",
+      "driver.frame.115.6451199054718.jpeg",
+      "driver.frame.115.84444665908813.jpeg",
+      "driver.frame.116.05454707145691.jpeg",
+      "driver.frame.116.28700995445251.jpeg",
+      "driver.frame.124.6079511642456.jpeg",
+      "driver.frame.126.47652053833008.jpeg",
+      "driver.frame.128.613285779953.jpeg",
+      "driver.frame.129.79622220993042.jpeg",
+      "driver.frame.130.3209466934204.jpeg",
+      "driver.frame.132.04451298713684.jpeg",
+      "driver.frame.132.28379154205322.jpeg",
+      "driver.frame.132.46033906936646.jpeg",
+      "driver.frame.132.65637683868408.jpeg",
+      "driver.frame.132.8112313747406.jpeg",
+      "driver.frame.132.9639744758606.jpeg",
+      "driver.frame.133.16704082489014.jpeg",
+      "driver.frame.133.35082340240479.jpeg",
+      "driver.frame.133.55103707313538.jpeg",
+      "driver.frame.134.23623061180115.jpeg",
+      "driver.frame.134.45159912109375.jpeg",
+      "driver.frame.136.7241494655609.jpeg",
+      "driver.frame.139.4366545677185.jpeg",
+      "driver.frame.139.69437718391418.jpeg",
+      "driver.frame.140.06832933425903.jpeg",
+      "driver.frame.140.2857210636139.jpeg",
+      "driver.frame.140.6521279811859.jpeg",
+      "driver.frame.140.81592917442322.jpeg",
+      "driver.frame.141.0300736427307.jpeg",
+      "driver.frame.141.277934551239.jpeg"
+    ],
+    "interactions": [
+      {
+        "agent_id": 0,
+        "action_id": 500,
+        "time_start": 40.5503203868866,
+        "duration": 1,
+        "success": 0,
+        "query": "",
+        "obj_interaction_action": 0,
+        "action_idx": 30
+      },
+      {
+        "agent_id": 0,
+        "action_id": 100,
+        "time_start": 63.42138171195984,
+        "duration": 1,
+        "success": 1,
+        "utterance": "Good day!  We are preparing breakfast.  We first need to wash a dirty mug.",
+        "obj_interaction_action": 0,
+        "action_idx": 33,
+        "corrected_utterance": "Good day! We are preparing breakfast. We first need to wash a dirty mug.",
+        "is_corrected": 0,
+        "da_metadata": {
+          "agent": "Commander",
+          "tstamp": "63.42138171",
+          "utterance": "Good day!  We are preparing breakfast.  We first need to wash a dirty mug.",
+          "text_segments": [
+            "Good day!",
+            "We are preparing breakfast.  We first need to wash a dirty mug.",
+            ""
+          ],
+          "das": [
+            "Greetings/Salutations",
+            "Instruction",
+            ""
+          ]
+        }
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 72.49418449401855,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.75,
+          -2.75,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 73.01422500610352,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.75,
+          -2.5,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 73.36088943481445,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.75,
+          -2.25,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 74.26896262168884,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.75,
+          -2.0,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 74.56517672538757,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.75,
+          -1.75,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 74.8025472164154,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.75,
+          -1.5,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 74.9824378490448,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.75,
+          -1.25,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 75.14844965934753,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.75,
+          -1.0,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 75.4631564617157,
+        "duration": 1,
+        "success": 0,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.75,
+          -1.0,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 4,
+        "time_start": 75.96460771560669,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          90
+        ],
+        "pose": [
+          1.75,
+          -1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 4
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 79.30943131446838,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.5,
+          -1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 79.64453387260437,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.25,
+          -1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 80.02185988426208,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.0,
+          -1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 80.29819130897522,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.75,
+          -1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 80.65819597244263,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.5,
+          -1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 80.82660031318665,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.25,
+          -1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 80.9943687915802,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.0,
+          -1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 5,
+        "time_start": 83.70984768867493,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          -90
+        ],
+        "pose": [
+          0.0,
+          -1.0,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 5
+      },
+      {
+        "agent_id": 1,
+        "action_id": 5,
+        "time_start": 85.9174530506134,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          -90
+        ],
+        "pose": [
+          0.0,
+          -1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 5
+      },
+      {
+        "agent_id": 1,
+        "action_id": 8,
+        "time_start": 88.13292503356934,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0.25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.0,
+          -0.75,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 8
+      },
+      {
+        "agent_id": 1,
+        "action_id": 8,
+        "time_start": 88.55967974662781,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0.25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.0,
+          -0.5,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 8
+      },
+      {
+        "agent_id": 1,
+        "action_id": 8,
+        "time_start": 88.94492936134338,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0.25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.0,
+          -0.25,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 8
+      },
+      {
+        "agent_id": 1,
+        "action_id": 8,
+        "time_start": 89.32522559165955,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0.25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.0,
+          -0.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 8
+      },
+      {
+        "agent_id": 1,
+        "action_id": 8,
+        "time_start": 89.60417485237122,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0.25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.0,
+          0.25,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 8
+      },
+      {
+        "agent_id": 1,
+        "action_id": 8,
+        "time_start": 89.78232622146606,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0.25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.0,
+          0.5,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 8
+      },
+      {
+        "agent_id": 1,
+        "action_id": 8,
+        "time_start": 90.00286221504211,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0.25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.0,
+          0.75,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 8
+      },
+      {
+        "agent_id": 0,
+        "action_id": 502,
+        "time_start": 90.17087864875793,
+        "duration": 1,
+        "success": 1,
+        "query": "mug",
+        "obj_interaction_action": 0,
+        "action_idx": 32
+      },
+      {
+        "agent_id": 1,
+        "action_id": 8,
+        "time_start": 98.04963207244873,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0.25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.0,
+          1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 8
+      },
+      {
+        "agent_id": 1,
+        "action_id": 8,
+        "time_start": 98.35740399360657,
+        "duration": 1,
+        "success": 0,
+        "pose_delta": [
+          0,
+          0.25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.0,
+          1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 8
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 99.4287703037262,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.25,
+          1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 100.02158403396606,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.5,
+          1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 100.34013772010803,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.75,
+          1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 100.74442267417908,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.0,
+          1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 103.44409799575806,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.25,
+          1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 105.15599179267883,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.5,
+          1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 105.50784850120544,
+        "duration": 1,
+        "success": 0,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.5,
+          1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 106.20892071723938,
+        "duration": 1,
+        "success": 0,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.5,
+          1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 106.96456408500671,
+        "duration": 1,
+        "success": 0,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.5,
+          1.0,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -0.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 4,
+        "time_start": 108.05310535430908,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          90
+        ],
+        "pose": [
+          1.5,
+          1.0,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 4
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 110.68426752090454,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.5,
+          1.25,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 110.9509711265564,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.5,
+          1.5,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 111.17534112930298,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.5,
+          1.75,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 111.46380114555359,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.5,
+          2.0,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 111.67392063140869,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.5,
+          2.25,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 111.87780666351318,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.5,
+          2.5,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 112.2890682220459,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.5,
+          2.75,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 4,
+        "time_start": 113.0441026687622,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          90
+        ],
+        "pose": [
+          1.5,
+          2.75,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 4
+      },
+      {
+        "agent_id": 0,
+        "action_id": 502,
+        "time_start": 113.19409084320068,
+        "duration": 1,
+        "success": 1,
+        "query": "mug",
+        "obj_interaction_action": 0,
+        "action_idx": 32
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 115.6451199054718,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.25,
+          2.75,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 115.84444665908813,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.0,
+          2.75,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 116.05454707145691,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.75,
+          2.75,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 116.28700995445251,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.5,
+          2.75,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 200,
+        "time_start": 124.6079511642456,
+        "duration": 1,
+        "success": 1,
+        "x": 0.30828025477707005,
+        "y": 0.9286624203821656,
+        "oid": "Mug|-02.43|+00.59|+00.17",
+        "obj_interaction_action": 1,
+        "action_idx": 15
+      },
+      {
+        "agent_id": 1,
+        "action_id": 4,
+        "time_start": 126.47652053833008,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          90
+        ],
+        "pose": [
+          0.5,
+          2.75,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -90.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 4
+      },
+      {
+        "agent_id": 1,
+        "action_id": 8,
+        "time_start": 128.613285779953,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0.25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.75,
+          2.75,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -90.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 8
+      },
+      {
+        "agent_id": 1,
+        "action_id": 8,
+        "time_start": 129.79622220993042,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0.25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.0,
+          2.75,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -90.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 8
+      },
+      {
+        "agent_id": 1,
+        "action_id": 8,
+        "time_start": 130.3209466934204,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0.25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.25,
+          2.75,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -90.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 8
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 132.04451298713684,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.25,
+          2.5,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -90.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 132.28379154205322,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.25,
+          2.25,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -90.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 132.46033906936646,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.25,
+          2.0,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -90.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 132.65637683868408,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.25,
+          1.75,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -90.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 132.8112313747406,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.25,
+          1.5,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -90.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 132.9639744758606,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.25,
+          1.25,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -90.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 133.16704082489014,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.25,
+          1.0,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -90.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 133.35082340240479,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.25,
+          0.75,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -90.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 133.55103707313538,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.25,
+          0.5,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -90.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 5,
+        "time_start": 134.23623061180115,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          -90
+        ],
+        "pose": [
+          1.25,
+          0.5,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 5
+      },
+      {
+        "agent_id": 1,
+        "action_id": 5,
+        "time_start": 134.45159912109375,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          -90
+        ],
+        "pose": [
+          1.25,
+          0.5,
+          0.9009991884231567,
+          0,
+          30.000024795532227,
+          -270.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 5
+      },
+      {
+        "agent_id": 1,
+        "action_id": 4,
+        "time_start": 136.7241494655609,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          90
+        ],
+        "pose": [
+          1.25,
+          0.5,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 4
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 139.4366545677185,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          1.0,
+          0.5,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 139.69437718391418,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.75,
+          0.5,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 140.06832933425903,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.5,
+          0.5,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 140.2857210636139,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.25,
+          0.5,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 140.6521279811859,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          0.0,
+          0.5,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 140.81592917442322,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          -0.25,
+          0.5,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 141.0300736427307,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          -0.5,
+          0.5,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      },
+      {
+        "agent_id": 1,
+        "action_id": 2,
+        "time_start": 141.277934551239,
+        "duration": 1,
+        "success": 1,
+        "pose_delta": [
+          0.25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pose": [
+          -0.75,
+          0.5,
+          0.9009991884231567,
+          0,
+          30.000028610229492,
+          -180.0
+        ],
+        "obj_interaction_action": 0,
+        "action_idx": 2
+      }
+    ],
+    "game_id": "0008f3c95e006303_2053",
+    "instance_id": "0008f3c95e006303_2053.edh0",
+    "pred_start_idx": 2,
+    "init_state_diff": {
+      "agents": {},
+      "objects": {}
+    },
+    "final_state_diff": {
+      "agents": {},
+      "objects": {
+        "Bowl|-02.37|+00.84|+03.41": {
+          "distance": 4.5573
+        },
+        "Statue|-01.69|+00.11|-00.84": {
+          "distance": 1.4264
+        },
+        "Mug|-02.43|+00.59|+00.17": {
+          "position": {
+            "x": -0.5,
+            "y": 1.2474,
+            "z": -0.9991
+          },
+          "rotation": {
+            "x": 0.0,
+            "y": 180.0,
+            "z": -0.0
+          },
+          "visible": true,
+          "obstructed": false,
+          "isPickedUp": true,
+          "distance": 0.4267,
+          "parentReceptacles": null,
+          "axisAlignedBoundingBox": {
+            "cornerPoints": [
+              [
+                -0.4257,
+                1.3511,
+                -0.9477
+              ],
+              [
+                -0.4257,
+                1.3511,
+                -1.0502
+              ],
+              [
+                -0.4257,
+                1.2474,
+                -0.9477
+              ],
+              [
+                -0.4257,
+                1.2474,
+                -1.0502
+              ],
+              [
+                -0.5513,
+                1.3511,
+                -0.9477
+              ],
+              [
+                -0.5513,
+                1.3511,
+                -1.0502
+              ],
+              [
+                -0.5513,
+                1.2474,
+                -0.9477
+              ],
+              [
+                -0.5513,
+                1.2474,
+                -1.0502
+              ]
+            ],
+            "center": {
+              "x": -0.4885,
+              "y": 1.2993,
+              "z": -0.9989
+            },
+            "size": {
+              "x": 0.1256,
+              "y": 0.1036,
+              "z": 0.1025
+            }
+          },
+          "objectOrientedBoundingBox": {
+            "cornerPoints": [
+              [
+                -0.5513,
+                1.2474,
+                -1.0502
+              ],
+              [
+                -0.4257,
+                1.2474,
+                -1.0502
+              ],
+              [
+                -0.4257,
+                1.2474,
+                -0.9477
+              ],
+              [
+                -0.5513,
+                1.2474,
+                -0.9477
+              ],
+              [
+                -0.5513,
+                1.3511,
+                -1.0502
+              ],
+              [
+                -0.4257,
+                1.3511,
+                -1.0502
+              ],
+              [
+                -0.4257,
+                1.3511,
+                -0.9477
+              ],
+              [
+                -0.5513,
+                1.3511,
+                -0.9477
+              ]
+            ]
+          },
+          "simbotPickedUp": 1,
+          "simbotLastParentReceptacle": null
+        },
+        "Spoon|+00.12|+00.92|-01.79": {
+          "visible": true,
+          "obstructed": false,
+          "distance": 1.2138
+        },
+        "DishSponge|+00.52|+00.71|-01.41": {
+          "distance": 1.2302
+        },
+        "Vase|-01.89|+01.65|-01.67": {
+          "distance": 1.8293
+        },
+        "Bread|-01.52|+00.99|-00.29": {
+          "distance": 1.1197
+        },
+        "ButterKnife|-00.15|+01.14|+02.29": {
+          "distance": 3.0658
+        },
+        "SaltShaker|-02.94|+00.84|+03.18": {
+          "distance": 4.6261
+        },
+        "Knife|-03.45|+00.54|+03.28": {
+          "distance": 5.0069
+        },
+        "Spatula|+03.78|+00.89|+01.47": {
+          "distance": 4.8234
+        },
+        "Plate|-02.32|+00.84|+03.15": {
+          "distance": 4.3012
+        },
+        "Egg|+00.08|+00.82|+02.25": {
+          "distance": 3.0582
+        },
+        "Tomato|-00.87|+00.24|+02.14": {
+          "temperature": "RoomTemp",
+          "distance": 2.9844
+        },
+        "ButterKnife|-00.26|+00.38|+02.11": {
+          "distance": 2.9185
+        },
+        "Knife|-02.53|+00.87|+02.88": {
+          "distance": 4.1539
+        },
+        "Bowl|+00.07|+00.92|-01.43": {
+          "visible": true,
+          "obstructed": false,
+          "distance": 0.8867
+        },
+        "SaltShaker|-00.15|+00.80|+02.25": {
+          "distance": 3.024
+        },
+        "Floor|+00.00|+00.00|+00.00": {
+          "visible": false,
+          "obstructed": true,
+          "receptacleObjectIds": [
+            "ShelvingUnit|+03.73|+00.01|+01.67",
+            "Shelf|+03.73|+00.17|+01.67",
+            "Fridge|-00.04|+00.00|+02.18",
+            "GarbageCan|-00.87|00.00|+02.14",
+            "Tomato|-00.87|+00.24|+02.14",
+            "Stool|-02.50|00.00|+00.06",
+            "Stool|-02.48|00.00|-00.80",
+            "Chair|-01.70|+00.00|+03.24",
+            "DiningTable|-02.66|+00.00|+03.21",
+            "Chair|-02.93|+00.00|+02.44",
+            "Chair|-03.51|+00.00|+03.29"
+          ],
+          "distance": 1.2745
+        },
+        "Book|-01.94|+00.90|-01.69": {
+          "distance": 1.7213
+        },
+        "Cabinet|-02.17|+02.01|-01.54": {
+          "distance": 2.1559
+        },
+        "Sink|+00.02|+00.77|-01.71": {
+          "visible": true,
+          "obstructed": false,
+          "receptacleObjectIds": [
+            "Spoon|+00.12|+00.92|-01.79",
+            "SaltShaker|+00.12|+00.92|-01.72",
+            "Bowl|+00.07|+00.92|-01.43",
+            "Faucet|-00.19|+00.92|-01.75"
+          ],
+          "distance": 1.1001
+        },
+        "Cabinet|+01.45|+02.26|-01.54": {
+          "distance": 2.5017
+        },
+        "StoveBurner|+00.97|+00.96|-01.69": {
+          "distance": 1.7483
+        },
+        "CounterTop|-01.87|+00.95|-00.61": {
+          "visible": true,
+          "obstructed": false,
+          "receptacleObjectIds": [
+            "Bread|-01.52|+00.99|-00.29",
+            "Bowl|-01.85|+00.91|-00.29",
+            "Statue|-01.96|+00.91|-00.94",
+            "Lettuce|-01.65|+00.97|-01.05",
+            "Kettle|-02.18|+00.91|-01.27",
+            "Book|-01.94|+00.90|-01.69",
+            "Apple|-00.69|+00.96|-01.44",
+            "CoffeeMachine|-01.11|+00.90|-01.73",
+            "SoapBottle|+00.50|+00.90|-01.79",
+            "Sink|+00.02|+00.77|-01.71"
+          ],
+          "distance": 1.3735
+        },
+        "Cabinet|-02.22|+00.37|-01.87": {
+          "distance": 2.1196
+        },
+        "DiningTable|-02.66|+00.00|+03.21": {
+          "receptacleObjectIds": [
+            "Vase|-02.41|+00.84|+03.68",
+            "Bowl|-02.37|+00.84|+03.41",
+            "Plate|-02.59|+00.84|+03.56",
+            "ButterKnife|-02.66|+00.84|+03.37",
+            "Plate|-02.32|+00.84|+03.15",
+            "HousePlant|-02.66|+00.84|+03.21",
+            "Knife|-02.53|+00.87|+02.88",
+            "SaltShaker|-02.94|+00.84|+03.18",
+            "Egg|-02.14|+00.87|+03.42"
+          ],
+          "distance": 4.5994
+        },
+        "StoveBurner|+01.33|+00.96|-01.69": {
+          "distance": 2.056
+        },
+        "StoveBurner|+01.33|+00.96|-01.42": {
+          "distance": 1.9483
+        },
+        "Cabinet|-01.48|+00.37|-01.24": {
+          "distance": 1.2126
+        },
+        "Cabinet|+01.78|+00.37|-01.24": {
+          "distance": 2.387
+        },
+        "Cabinet|+00.78|+00.37|-01.24": {
+          "visible": true,
+          "obstructed": false,
+          "distance": 1.4655
+        },
+        "Cabinet|+00.38|+00.37|-01.24": {
+          "visible": true,
+          "obstructed": false,
+          "distance": 1.1348
+        },
+        "Cabinet|-00.57|+00.37|-01.24": {
+          "visible": true,
+          "obstructed": false,
+          "distance": 0.7235
+        },
+        "Cabinet|+01.78|+02.01|-01.54": {
+          "distance": 2.6522
+        },
+        "Cabinet|+00.52|+02.01|-01.54": {
+          "distance": 1.7056
+        },
+        "Cabinet|-00.71|+02.01|-01.54": {
+          "visible": true,
+          "obstructed": false,
+          "distance": 1.3801
+        },
+        "Cabinet|-01.67|+02.01|-01.54": {
+          "distance": 1.7959
+        },
+        "Cabinet|+00.85|+02.26|-01.54": {
+          "distance": 2.0764
+        },
+        "Drawer|-01.64|+00.68|-00.93": {
+          "distance": 1.1715
+        },
+        "Drawer|+01.65|+00.68|-01.40": {
+          "distance": 2.2558
+        },
+        "Drawer|+00.60|+00.68|-01.40": {
+          "distance": 1.2947
+        },
+        "StoveBurner|+00.97|+00.96|-01.42": {
+          "distance": 1.62
+        },
+        "Drawer|-02.06|+00.68|-01.58": {
+          "distance": 1.783
+        },
+        "CounterTop|+01.65|+00.95|-01.53": {
+          "receptacleObjectIds": [
+            "Potato|+01.69|+00.94|-01.35",
+            "PepperShaker|+01.69|+00.90|-01.44",
+            "Toaster|+01.64|+00.90|-01.67"
+          ],
+          "distance": 2.2831
+        },
+        "Fork|-02.04|+00.71|-01.66": {
+          "distance": 1.799
+        },
+        "Tomato|-02.51|+00.64|-00.76": {
+          "temperature": "RoomTemp",
+          "distance": 2.0269
+        },
+        "Shelf|+03.73|+00.88|+01.67": {
+          "distance": 4.8702
+        },
+        "LightSwitch|+02.83|+01.27|-00.75": {
+          "distance": 3.3506
+        },
+        "Egg|-02.14|+00.87|+03.42": {
+          "distance": 4.4833
+        },
+        "Kettle|-02.18|+00.91|-01.27": {
+          "distance": 1.7608
+        },
+        "Shelf|+03.73|+00.55|+01.67": {
+          "distance": 4.8832
+        },
+        "Microwave|+01.15|+01.66|-01.61": {
+          "distance": 2.0099
+        },
+        "Fridge|-00.04|+00.00|+02.18": {
+          "receptacleObjectIds": [
+            "ButterKnife|-00.26|+00.38|+02.11",
+            "Egg|+00.08|+00.82|+02.25",
+            "SaltShaker|-00.15|+00.80|+02.25",
+            "Statue|-00.26|+00.80|+02.25",
+            "ButterKnife|-00.15|+01.14|+02.29",
+            "Vase|+00.31|+01.57|+02.22"
+          ],
+          "distance": 3.0976
+        },
+        "Vase|-02.41|+00.84|+03.68": {
+          "distance": 4.8261
+        },
+        "Cup|-02.42|+00.59|-00.91": {
+          "distance": 1.9554
+        },
+        "Window|-00.12|+01.80|-01.90": {
+          "visible": true,
+          "obstructed": false,
+          "distance": 1.5078
+        },
+        "Window|-04.01|+01.80|+00.31": {
+          "distance": 3.7742
+        },
+        "WineBottle|+00.70|+01.65|-01.71": {
+          "temperature": "RoomTemp",
+          "distance": 1.7107
+        },
+        "Plate|-02.59|+00.84|+03.56": {
+          "distance": 4.7864
+        },
+        "Spatula|+03.60|+00.57|+01.77": {
+          "distance": 4.8263
+        },
+        "Potato|+01.69|+00.94|-01.35": {
+          "temperature": "RoomTemp",
+          "distance": 2.2679
+        },
+        "Pot|+01.33|+00.96|-01.69": {
+          "distance": 2.056
+        },
+        "Shelf|+03.73|+00.17|+01.67": {
+          "distance": 4.925
+        },
+        "Knife|-02.94|+00.54|+02.33": {
+          "distance": 3.9455
+        },
+        "Sink|+00.02|+00.77|-01.71|SinkBasin": {
+          "visible": true,
+          "obstructed": false,
+          "distance": 0.875
+        },
+        "SaltShaker|+00.12|+00.92|-01.72": {
+          "visible": true,
+          "obstructed": false,
+          "distance": 1.1524
+        },
+        "GarbageCan|-00.87|00.00|+02.14": {
+          "distance": 3.0466
+        },
+        "PepperShaker|+01.69|+00.90|-01.44": {
+          "distance": 2.2931
+        },
+        "Lettuce|-01.65|+00.97|-01.05": {
+          "distance": 1.1935
+        },
+        "ButterKnife|-02.66|+00.84|+03.37": {
+          "distance": 4.6507
+        },
+        "StoveKnob|+01.09|+00.91|-01.24": {
+          "distance": 1.6643
+        },
+        "StoveKnob|+01.21|+00.91|-01.24": {
+          "distance": 1.779
+        },
+        "StoveKnob|+01.34|+00.91|-01.24": {
+          "distance": 1.9052
+        },
+        "StoveKnob|+00.96|+00.91|-01.24": {
+          "distance": 1.543
+        },
+        "Bread|+01.26|+01.84|-01.60": {
+          "distance": 2.1724
+        },
+        "Vase|+00.31|+01.57|+02.22": {
+          "distance": 3.1487
+        },
+        "Toaster|+01.64|+00.90|-01.67": {
+          "distance": 2.3291
+        },
+        "DishSponge|-02.46|+00.59|+00.06": {
+          "distance": 2.1435
+        },
+        "Apple|-00.69|+00.96|-01.44": {
+          "visible": true,
+          "obstructed": false,
+          "distance": 0.7202
+        },
+        "Pan|+01.33|+00.96|-01.42": {
+          "distance": 1.9483
+        },
+        "Chair|-03.51|+00.00|+03.29": {
+          "distance": 5.1153
+        },
+        "Spoon|-02.37|+00.59|-00.89": {
+          "distance": 1.8993
+        },
+        "CoffeeMachine|-01.11|+00.90|-01.73": {
+          "visible": true,
+          "obstructed": false,
+          "distance": 1.1528
+        },
+        "HousePlant|-02.66|+00.84|+03.21": {
+          "distance": 4.5127
+        },
+        "SoapBottle|+00.50|+00.90|-01.79": {
+          "visible": true,
+          "obstructed": false,
+          "distance": 1.444
+        },
+        "Mug|+00.32|+00.11|-01.49": {
+          "distance": 1.3582
+        },
+        "Faucet|-00.19|+00.92|-01.75": {
+          "visible": true,
+          "obstructed": false,
+          "distance": 1.0478
+        },
+        "ShelvingUnit|+03.73|+00.01|+01.67": {
+          "distance": 4.9518
+        },
+        "Statue|-00.26|+00.80|+02.25": {
+          "distance": 3.0126
+        },
+        "Statue|-01.96|+00.91|-00.94": {
+          "distance": 1.4735
+        },
+        "Stool|-02.50|00.00|+00.06": {
+          "receptacleObjectIds": [
+            "DishSponge|-02.46|+00.59|+00.06"
+          ],
+          "distance": 2.341
+        },
+        "Stool|-02.48|00.00|-00.80": {
+          "distance": 2.1726
+        },
+        "Bowl|-01.85|+00.91|-00.29": {
+          "distance": 1.4268
+        },
+        "Chair|-02.93|+00.00|+02.44": {
+          "distance": 4.1107
+        },
+        "Chair|-01.70|+00.00|+03.24": {
+          "distance": 4.2582
+        }
+      }
+    },
+    "state_changes": {
+      "agents": {},
+      "objects": {
+        "Mug|-02.43|+00.59|+00.17": {
+          "isPickedUp": true,
+          "simbotPickedUp": 1,
+          "simbotLastParentReceptacle": null
+        }
+      }
+    },
+    "history_subgoals": [],
+    "future_subgoals": [
+      "Navigate",
+      "Mug",
+      "Pickup",
+      "Mug"
+    ],
+    "expected_init_goal_conditions_total": 4,
+    "expected_init_goal_conditions_satisfied": 2,
+    "dialog_history_cleaned": [
+      [
+        "Commander",
+        "Good day! We are preparing breakfast. We first need to wash a dirty mug."
+      ]
+    ],
+    "dialog_history_with_das": [
+      {
+        "speaker": "Commander",
+        "utterance": "Good day!  We are preparing breakfast.  We first need to wash a dirty mug.",
+        "corrected_utterance": "Good day! We are preparing breakfast. We first need to wash a dirty mug.",
+        "da_metadata": {
+          "agent": "Commander",
+          "tstamp": "63.42138171",
+          "utterance": "Good day!  We are preparing breakfast.  We first need to wash a dirty mug.",
+          "text_segments": [
+            "Good day!",
+            "We are preparing breakfast.  We first need to wash a dirty mug.",
+            ""
+          ],
+          "das": [
+            "Greetings/Salutations",
+            "Instruction",
+            ""
+          ]
+        },
+        "timestamp": 63.42138171195984
+      }
+    ]
+  },
+  "episode_meta": {
+    "task_idx": null,
+    "episode_idx": null
+  },
+  "selected_interaction_idx": 0,
+  "edh_interaction": {
+    "agent_id": 0,
+    "action_id": 500,
+    "time_start": 40.5503203868866,
+    "duration": 1,
+    "success": 0,
+    "query": "",
+    "obj_interaction_action": 0,
+    "action_idx": 30
+  },
+  "game_interaction_at_same_index": {
+    "agent_id": 0,
+    "action_id": 500,
+    "time_start": 40.5503203868866,
+    "duration": 1,
+    "success": 0,
+    "query": ""
+  },
+  "state_fn": "/teach_dataset/images/train/0008f3c95e006303_2053/statediff.100.02158403396606.json",
+  "state": {
+    "agents": {},
+    "objects": {
+      "Bowl|-02.37|+00.84|+03.41": {
+        "distance": 3.4407
+      },
+      "Statue|-01.69|+00.11|-00.84": {
+        "distance": 1.5104
+      },
+      "Mug|-02.43|+00.59|+00.17": {
+        "distance": 1.4638
+      },
+      "Spoon|+00.12|+00.92|-01.79": {
+        "distance": 2.33
+      },
+      "DishSponge|+00.52|+00.71|-01.41": {
+        "distance": 2.2594
+      },
+      "Vase|-01.89|+01.65|-01.67": {
+        "distance": 2.2485
+      },
+      "Bread|-01.52|+00.99|-00.29": {
+        "distance": 0.7507
+      },
+      "ButterKnife|-00.15|+01.14|+02.29": {
+        "distance": 2.2198
+      },
+      "SaltShaker|-02.94|+00.84|+03.18": {
+        "distance": 3.5143
+      },
+      "Knife|-03.45|+00.54|+03.28": {
+        "distance": 3.913
+      },
+      "Spatula|+03.78|+00.89|+01.47": {
+        "distance": 4.9362
+      },
+      "Plate|-02.32|+00.84|+03.15": {
+        "distance": 3.1838
+      },
+      "Egg|+00.08|+00.82|+02.25": {
+        "distance": 2.2755
+      },
+      "Tomato|-00.87|+00.24|+02.14": {
+        "temperature": "RoomTemp",
+        "distance": 2.0034
+      },
+      "ButterKnife|-00.26|+00.38|+02.11": {
+        "distance": 2.0687
+      },
+      "Knife|-02.53|+00.87|+02.88": {
+        "distance": 3.0375
+      },
+      "Bowl|+00.07|+00.92|-01.43": {
+        "distance": 1.991
+      },
+      "SaltShaker|-00.15|+00.80|+02.25": {
+        "distance": 2.1776
+      },
+      "Floor|+00.00|+00.00|+00.00": {
+        "receptacleObjectIds": [
+          "ShelvingUnit|+03.73|+00.01|+01.67",
+          "Shelf|+03.73|+00.17|+01.67",
+          "Fridge|-00.04|+00.00|+02.18",
+          "GarbageCan|-00.87|00.00|+02.14",
+          "Tomato|-00.87|+00.24|+02.14",
+          "Stool|-02.50|00.00|+00.06",
+          "Stool|-02.48|00.00|-00.80",
+          "Chair|-01.70|+00.00|+03.24",
+          "DiningTable|-02.66|+00.00|+03.21",
+          "Chair|-02.93|+00.00|+02.44",
+          "Chair|-03.51|+00.00|+03.29"
+        ],
+        "distance": 1.3691
+      },
+      "Book|-01.94|+00.90|-01.69": {
+        "distance": 2.1584
+      },
+      "Cabinet|-02.17|+02.01|-01.54": {
+        "distance": 2.4091
+      },
+      "Sink|+00.02|+00.77|-01.71": {
+        "receptacleObjectIds": [
+          "Spoon|+00.12|+00.92|-01.79",
+          "SaltShaker|+00.12|+00.92|-01.72",
+          "Bowl|+00.07|+00.92|-01.43",
+          "Faucet|-00.19|+00.92|-01.75"
+        ],
+        "distance": 2.2139
+      },
+      "Cabinet|+01.45|+02.26|-01.54": {
+        "distance": 3.3225
+      },
+      "StoveBurner|+00.97|+00.96|-01.69": {
+        "distance": 2.7671
+      },
+      "CounterTop|-01.87|+00.95|-00.61": {
+        "visible": true,
+        "obstructed": false,
+        "receptacleObjectIds": [
+          "Bread|-01.52|+00.99|-00.29",
+          "Bowl|-01.85|+00.91|-00.29",
+          "Statue|-01.96|+00.91|-00.94",
+          "Lettuce|-01.65|+00.97|-01.05",
+          "Kettle|-02.18|+00.91|-01.27",
+          "Book|-01.94|+00.90|-01.69",
+          "Apple|-00.69|+00.96|-01.44",
+          "CoffeeMachine|-01.11|+00.90|-01.73",
+          "SoapBottle|+00.50|+00.90|-01.79",
+          "Sink|+00.02|+00.77|-01.71"
+        ],
+        "distance": 1.2242
+      },
+      "Cabinet|-02.22|+00.37|-01.87": {
+        "distance": 2.505
+      },
+      "DiningTable|-02.66|+00.00|+03.21": {
+        "receptacleObjectIds": [
+          "Vase|-02.41|+00.84|+03.68",
+          "Bowl|-02.37|+00.84|+03.41",
+          "Plate|-02.59|+00.84|+03.56",
+          "ButterKnife|-02.66|+00.84|+03.37",
+          "Plate|-02.32|+00.84|+03.15",
+          "HousePlant|-02.66|+00.84|+03.21",
+          "Knife|-02.53|+00.87|+02.88",
+          "SaltShaker|-02.94|+00.84|+03.18",
+          "Egg|-02.14|+00.87|+03.42"
+        ],
+        "distance": 3.5107
+      },
+      "StoveBurner|+01.33|+00.96|-01.69": {
+        "distance": 3.0302
+      },
+      "StoveBurner|+01.33|+00.96|-01.42": {
+        "distance": 2.8662
+      },
+      "Cabinet|-01.48|+00.37|-01.24": {
+        "distance": 1.6469
+      },
+      "Cabinet|+01.78|+00.37|-01.24": {
+        "distance": 3.195
+      },
+      "Cabinet|+00.78|+00.37|-01.24": {
+        "distance": 2.3787
+      },
+      "Cabinet|+00.38|+00.37|-01.24": {
+        "distance": 2.0972
+      },
+      "Cabinet|-00.57|+00.37|-01.24": {
+        "distance": 1.6357
+      },
+      "Cabinet|+01.78|+02.01|-01.54": {
+        "distance": 3.4849
+      },
+      "Cabinet|+00.52|+02.01|-01.54": {
+        "distance": 2.6018
+      },
+      "Cabinet|-00.71|+02.01|-01.54": {
+        "distance": 2.1272
+      },
+      "Cabinet|-01.67|+02.01|-01.54": {
+        "distance": 2.2094
+      },
+      "Cabinet|+00.85|+02.26|-01.54": {
+        "distance": 2.9158
+      },
+      "Drawer|-01.64|+00.68|-00.93": {
+        "distance": 1.3585
+      },
+      "Drawer|+01.65|+00.68|-01.40": {
+        "distance": 3.1278
+      },
+      "Drawer|+00.60|+00.68|-01.40": {
+        "distance": 2.3066
+      },
+      "StoveBurner|+00.97|+00.96|-01.42": {
+        "distance": 2.5861
+      },
+      "Drawer|-02.06|+00.68|-01.58": {
+        "distance": 2.1275
+      },
+      "CounterTop|+01.65|+00.95|-01.53": {
+        "receptacleObjectIds": [
+          "Potato|+01.69|+00.94|-01.35",
+          "PepperShaker|+01.69|+00.90|-01.44",
+          "Toaster|+01.64|+00.90|-01.67"
+        ],
+        "distance": 3.1882
+      },
+      "Fork|-02.04|+00.71|-01.66": {
+        "distance": 2.185
+      },
+      "Tomato|-02.51|+00.64|-00.76": {
+        "temperature": "RoomTemp",
+        "distance": 1.833
+      },
+      "Shelf|+03.73|+00.88|+01.67": {
+        "distance": 4.9349
+      },
+      "LightSwitch|+02.83|+01.27|-00.75": {
+        "distance": 3.9753
+      },
+      "Egg|-02.14|+00.87|+03.42": {
+        "distance": 3.3711
+      },
+      "Kettle|-02.18|+00.91|-01.27": {
+        "distance": 1.9232
+      },
+      "Shelf|+03.73|+00.55|+01.67": {
+        "distance": 4.9478
+      },
+      "Microwave|+01.15|+01.66|-01.61": {
+        "distance": 2.9443
+      },
+      "Fridge|-00.04|+00.00|+02.18": {
+        "receptacleObjectIds": [
+          "ButterKnife|-00.26|+00.38|+02.11",
+          "Egg|+00.08|+00.82|+02.25",
+          "SaltShaker|-00.15|+00.80|+02.25",
+          "Statue|-00.26|+00.80|+02.25",
+          "ButterKnife|-00.15|+01.14|+02.29",
+          "Vase|+00.31|+01.57|+02.22"
+        ],
+        "distance": 2.3359
+      },
+      "Vase|-02.41|+00.84|+03.68": {
+        "distance": 3.7106
+      },
+      "Cup|-02.42|+00.59|-00.91": {
+        "distance": 1.8612
+      },
+      "Window|-00.12|+01.80|-01.90": {
+        "distance": 2.49
+      },
+      "Window|-04.01|+01.80|+00.31": {
+        "distance": 3.1409
+      },
+      "WineBottle|+00.70|+01.65|-01.71": {
+        "temperature": "RoomTemp",
+        "distance": 2.7022
+      },
+      "Plate|-02.59|+00.84|+03.56": {
+        "distance": 3.6686
+      },
+      "Spatula|+03.60|+00.57|+01.77": {
+        "distance": 4.8573
+      },
+      "Potato|+01.69|+00.94|-01.35": {
+        "temperature": "RoomTemp",
+        "distance": 3.1264
+      },
+      "Pot|+01.33|+00.96|-01.69": {
+        "distance": 3.0302
+      },
+      "Shelf|+03.73|+00.17|+01.67": {
+        "distance": 4.989
+      },
+      "Knife|-02.94|+00.54|+02.33": {
+        "distance": 2.8667
+      },
+      "Sink|+00.02|+00.77|-01.71|SinkBasin": {
+        "distance": 1.9615
+      },
+      "SaltShaker|+00.12|+00.92|-01.72": {
+        "distance": 2.267
+      },
+      "GarbageCan|-00.87|00.00|+02.14": {
+        "distance": 2.0949
+      },
+      "PepperShaker|+01.69|+00.90|-01.44": {
+        "distance": 3.1734
+      },
+      "Lettuce|-01.65|+00.97|-01.05": {
+        "distance": 1.4558
+      },
+      "ButterKnife|-02.66|+00.84|+03.37": {
+        "distance": 3.5331
+      },
+      "StoveKnob|+01.09|+00.91|-01.24": {
+        "distance": 2.5685
+      },
+      "StoveKnob|+01.21|+00.91|-01.24": {
+        "distance": 2.6668
+      },
+      "StoveKnob|+01.34|+00.91|-01.24": {
+        "distance": 2.7763
+      },
+      "StoveKnob|+00.96|+00.91|-01.24": {
+        "distance": 2.4659
+      },
+      "Bread|+01.26|+01.84|-01.60": {
+        "distance": 3.0707
+      },
+      "Vase|+00.31|+01.57|+02.22": {
+        "distance": 2.4561
+      },
+      "Toaster|+01.64|+00.90|-01.67": {
+        "distance": 3.2651
+      },
+      "DishSponge|-02.46|+00.59|+00.06": {
+        "distance": 1.5049
+      },
+      "Apple|-00.69|+00.96|-01.44": {
+        "distance": 1.7202
+      },
+      "Pan|+01.33|+00.96|-01.42": {
+        "distance": 2.8662
+      },
+      "Chair|-03.51|+00.00|+03.29": {
+        "distance": 4.041
+      },
+      "Spoon|-02.37|+00.59|-00.89": {
+        "distance": 1.8064
+      },
+      "CoffeeMachine|-01.11|+00.90|-01.73": {
+        "distance": 1.9802
+      },
+      "HousePlant|-02.66|+00.84|+03.21": {
+        "distance": 3.3958
+      },
+      "SoapBottle|+00.50|+00.90|-01.79": {
+        "distance": 2.5328
+      },
+      "Mug|+00.32|+00.11|-01.49": {
+        "distance": 2.3218
+      },
+      "Faucet|-00.19|+00.92|-01.75": {
+        "distance": 2.1587
+      },
+      "ShelvingUnit|+03.73|+00.01|+01.67": {
+        "distance": 5.0154
+      },
+      "Statue|-00.26|+00.80|+02.25": {
+        "distance": 2.1353
+      },
+      "Statue|-01.96|+00.91|-00.94": {
+        "distance": 1.5296
+      },
+      "Stool|-02.50|00.00|+00.06": {
+        "receptacleObjectIds": [
+          "DishSponge|-02.46|+00.59|+00.06",
+          "Mug|-02.43|+00.59|+00.17"
+        ],
+        "distance": 1.7619
+      },
+      "Stool|-02.48|00.00|-00.80": {
+        "distance": 2.0249
+      },
+      "Bowl|-01.85|+00.91|-00.29": {
+        "distance": 1.006
+      },
+      "Chair|-02.93|+00.00|+02.44": {
+        "distance": 3.0558
+      },
+      "Chair|-01.70|+00.00|+03.24": {
+        "distance": 3.1955
+      }
+    }
+  }
+}

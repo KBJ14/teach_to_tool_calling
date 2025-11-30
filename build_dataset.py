@@ -36,11 +36,8 @@ The following information describes the current context:
 ### Environmental Context (Perception & Map):
 {initial_state}
 
-### Dialogue History:
-{dialogue_history}
-
-### Previous Actions:
-{previous_actions}
+### Interaction History (Chronological):
+{history}
 
 ### Available Tools:
 {tool_list}
@@ -313,20 +310,36 @@ def convert_turn_actions_to_tools(turn_actions, tools, mappings):
 def build_history_until_turn(turns, turn_idx, tools, mappings):
     history = []
     for t in turns[:turn_idx]:
-        for cand in (t.get("pre_turn_dialogs") or t.get("commander_context") or t.get("history") or []):
+        # 1. Dialogues (Prioritize commander_context for local context)
+        dialog_source = t.get("commander_context")
+        if not dialog_source:
+             dialog_source = t.get("history") or []
+        
+        for cand in dialog_source:
             if not isinstance(cand, dict): continue
+            
+            # Filter Role
             role = "Commander" if int(cand.get("agent_id", 0)) == 0 else "Driver"
-            utt = cand.get("corrected_utterance") or cand.get("utterance") or cand.get("query")
-            if utt: history.append({"type": "dialogue", "role": role, "utterance": utt})
-        for agg in t.get("actions", []):
-            raw = agg.get("raw", {})
-            utt = raw.get("corrected_utterance") or raw.get("utterance")
-            if utt: history.append({"type": "dialogue", "role": "Driver", "utterance": utt})
-    for j in range(turn_idx):
-        t = turns[j]
-        if t.get("agent_id") != 1: continue
-        acts = convert_turn_actions_to_tools(t.get("actions", []), tools, mappings)
-        if acts: history.append({"type": "action", "role": "Driver", "actions": acts})
+            
+            # Fetch Utterance (REMOVE .get("query") to avoid system logs)
+            utt = cand.get("corrected_utterance") or cand.get("utterance")
+            if utt: 
+                history.append({"type": "dialogue", "role": role, "utterance": utt})
+
+        # 2. Actions & Driver Dialogues in this turn
+        if t.get("agent_id") == 1:
+            # Check for driver utterances inside action blocks
+            for agg in t.get("actions", []):
+                raw = agg.get("raw", {})
+                utt = raw.get("corrected_utterance") or raw.get("utterance")
+                if utt: 
+                    history.append({"type": "dialogue", "role": "Driver", "utterance": utt})
+            
+            # Convert Actions to Tools
+            acts = convert_turn_actions_to_tools(t.get("actions", []), tools, mappings)
+            if acts: 
+                history.append({"type": "action", "role": "Driver", "actions": acts})
+                
     return history
 
 def get_accumulated_instructions(history: List[Dict[str, Any]]) -> str:
@@ -369,26 +382,26 @@ def build_state_before_turn(turn_idx, turns, statediff_index, game_json):
 
 def build_llm_input(state_text: str, tools, history, latest_cmd: str):
     tool_list_text = json.dumps(tools, ensure_ascii=False)
-    dialogue_lines = []
-    prev_actions = []
+    
+    # Merge History (Chronological)
+    unified_history_lines = []
     for h in history:
-        if h["type"] == "dialogue": dialogue_lines.append(f'{h["role"]}: {h["utterance"]}')
-        elif h["type"] == "action": prev_actions.append({"role": h["role"], "actions": h["actions"]})
+        role = h["role"]
+        if h["type"] == "dialogue":
+            unified_history_lines.append(f'{role}: {h["utterance"]}')
+        elif h["type"] == "action":
+            actions_str = json.dumps(h["actions"], ensure_ascii=False)
+            unified_history_lines.append(f'{role} (actions): {actions_str}')
+    
+    history_text = "\n".join(unified_history_lines) if unified_history_lines else "(No interaction history)"
     
     head = BASE_PROMPT.format(
         initial_state=state_text,
-        dialogue_history="\n".join(dialogue_lines) if dialogue_lines else "(No dialogue history)",
-        previous_actions=json.dumps(prev_actions, ensure_ascii=False),
+        history=history_text,
         tool_list=tool_list_text,
     )
     
-    hist_lines = []
-    for h in history:
-        if h["type"] == "dialogue": hist_lines.append(f'{h["role"]}: {h["utterance"]}')
-        elif h["type"] == "action": hist_lines.append(f'{h["role"]} (actions): {json.dumps(h["actions"], ensure_ascii=False)}')
-        
-    return f"{head}\n\n--- Current Context ---\n" + "\n".join(hist_lines) + \
-           f"\n\nCommander: {latest_cmd}\nNow decide the next robot actions and respond with a JSON object."
+    return f"{head}\n\n--- New Instruction ---\nCommander: {latest_cmd}\nNow decide the next robot actions and respond with a JSON object."
 
 
 # ---------- MAIN LOOP ----------
@@ -486,14 +499,17 @@ def build_dataset_from_episode(episode_path, tools, mappings, processor):
             
             # Get Current Command
             current_cmd = ""
-            dialog_candidates = (turn.get("pre_turn_dialogs") or 
-                                 turn.get("commander_context") or 
-                                 turn.get("history") or [])
+            # Prioritize commander_context to get local instruction
+            dialog_candidates = turn.get("commander_context")
+            if not dialog_candidates:
+                 dialog_candidates = turn.get("history") or []
+                 
             for cand in dialog_candidates:
                 if isinstance(cand, dict):
                     role = "Commander" if int(cand.get("agent_id", 0)) == 0 else "Driver"
                     if role == "Commander":
-                        current_cmd = cand.get("corrected_utterance") or cand.get("utterance") or cand.get("query") or ""
+                        # REMOVE .get("query") to avoid system logs
+                        current_cmd = cand.get("corrected_utterance") or cand.get("utterance") or ""
                         break
             
             past_instructions = get_accumulated_instructions(history)

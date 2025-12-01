@@ -2,7 +2,7 @@ import json
 import math
 import argparse
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 from tqdm import tqdm
 
 # Try to import SentenceTransformer
@@ -12,18 +12,16 @@ try:
 except ImportError:
     _HAS_SBERT = False
 
-
 # ---------- CONFIG ----------
 
-TOOLS_JSON = Path("dataset/prompts/tools.json")
-
+# High Level Tools 정의 (Navigation 제외됨)
 HIGH_LEVEL_TOOL_NAMES = {
     "Pickup", "Place", "Open", "Close",
     "Slice", "Dirty", "Clean", "ToggleOn", "ToggleOff",
     "Fill", "Empty", "Pour", "Break"
 }
 
-# [압축용] 이동 액션 파라미터 정의
+# 이동 액션 압축용
 MOTION_PARAMS = {
     "Forward":       {"x": 0.25, "y": 0, "z": 0, "rot_x": 0, "rot_y": 0, "rot_z": 0},
     "Backward":      {"x": -0.25, "y": 0, "z": 0, "rot_x": 0, "rot_y": 0, "rot_z": 0},
@@ -38,8 +36,9 @@ MOTION_PARAMS = {
     "Stop":          {"x": 0, "y": 0, "z": 0, "rot_x": 0, "rot_y": 0, "rot_z": 0},
 }
 
-# ---------- PROMPT TEMPLATE ----------
+# ---------- PROMPT TEMPLATE (Changed) ----------
 
+# [변경] Available Tools 섹션이 제거되었습니다.
 BASE_PROMPT = """
 You are a high-level robot control assistant in a simulated home environment.
 
@@ -51,15 +50,25 @@ The following information describes the current context:
 ### Interaction History (Chronological):
 {history}
 
-### Available Tools:
-{tool_list}
+Your task:
+Based on the latest Commander utterance and the environmental context,
+decide the next robot actions by calling the appropriate functions.
+"""
+
+ONEACTION_PROMPT = """
+You are a high-level robot control assistant in a simulated home environment.
+
+The following information describes the current context:
+
+### Environmental Context (Perception & Map):
+{initial_state}
+
+### Interaction History (Chronological):
+{history}
 
 Your task:
 Based on the latest Commander utterance and the environmental context,
-decide the next robot actions.
-
-Output format:
-Return ONLY a JSON object with "actions" list.
+decide the **next immediate action** by calling the appropriate function.
 """
 
 # ---------- UTILS ----------
@@ -72,19 +81,7 @@ def write_jsonl(path: Path, rows: List[Dict[str, Any]]) -> None:
     with path.open("w", encoding="utf-8") as f:
         for row in rows: f.write(json.dumps(row, ensure_ascii=False) + "\n")
 
-def load_tools(tools_path: Path):
-    if not tools_path.exists():
-        candidate = Path(__file__).parent / "dataset/prompts/tools.json"
-        if candidate.exists():
-            tools_path = candidate
-        else:
-            return [], {}
-
-    data = read_json(tools_path)
-    tools = [t for t in data["tools"] if t["name"] in HIGH_LEVEL_TOOL_NAMES]
-    return tools, data["mappings"]["action_idx_to_tool"]
-
-# ---------- CONTEXT PROCESSOR ----------
+# ---------- CONTEXT PROCESSOR (Same as before) ----------
 
 class ContextProcessor:
     def __init__(self, mode: str, model_name: str):
@@ -195,9 +192,9 @@ class ContextProcessor:
         if not lines: return "(No interactable objects found)"
         return "\n".join(sorted(lines))
 
-# ---------- CORE LOGIC: EDH FILE PROCESSING ----------
+# ---------- CORE LOGIC ----------
 
-def process_edh_file(edh_path: Path, game_root: Path, tool_list_json: str, processor: ContextProcessor):
+def process_edh_file(edh_path: Path, game_root: Path, processor: ContextProcessor):
     try:
         edh_data = read_json(edh_path)
     except:
@@ -206,7 +203,6 @@ def process_edh_file(edh_path: Path, game_root: Path, tool_list_json: str, proce
     game_id = edh_data.get("game_id")
     split = edh_path.parent.name 
     
-    # Game JSON 찾기
     game_path = game_root / split / f"{game_id}.game.json"
     if not game_path.exists():
         candidates = list(game_root.rglob(f"*{game_id}*.game.json"))
@@ -220,149 +216,85 @@ def process_edh_file(edh_path: Path, game_root: Path, tool_list_json: str, proce
     except:
         return None, "Game JSON Read Failed"
 
-    # --- State Merge ---
+    # State Merge
     try:
         initial_objects = game_data["tasks"][0]["episodes"][0]["initial_state"]["objects"]
         initial_agents = game_data["tasks"][0]["episodes"][0]["initial_state"]["agents"]
-        
         objects_map = {obj["objectId"]: obj.copy() for obj in initial_objects}
-        
         edh_diff = edh_data.get("init_state_diff", {})
         diff_objects = edh_diff.get("objects", {})
         diff_agents = edh_diff.get("agents", {})
 
         for oid, changes in diff_objects.items():
-            if oid in objects_map:
-                objects_map[oid].update(changes)
-            else:
-                changes["objectId"] = oid
-                objects_map[oid] = changes
+            if oid in objects_map: objects_map[oid].update(changes)
+            else: changes["objectId"] = oid; objects_map[oid] = changes
 
         current_agents = diff_agents if diff_agents else initial_agents
-
-        merged_state = {
-            "agents": current_agents,
-            "objects": list(objects_map.values())
-        }
+        merged_state = {"agents": current_agents, "objects": list(objects_map.values())}
     except Exception as e:
         return None, f"State Merge Error: {e}"
 
-    # --- Answer Extraction ---
+    # Answer Extraction
     future_actions = edh_data.get("driver_actions_future", [])
-    if not future_actions: 
-        return None, "No Future Actions"
+    if not future_actions: return None, "No Future Actions"
     
     next_act = future_actions[0]
     raw_action_name = next_act.get("action_name", "Unknown")
     
-    # [요구사항 1] 정답 액션 필터링: High Level Tool만 허용
     if raw_action_name not in HIGH_LEVEL_TOOL_NAMES:
         return None, f"Filtered Action: {raw_action_name}"
 
     answer_json = {
-        "actions": [{
-            "tool_name": raw_action_name,
-            "parameters": {} 
-        }]
+        "actions": [{"tool_name": raw_action_name, "parameters": {}}]
     }
 
-    # --- [요구사항 2] History Generation & Motion Compression ---
-    
-    # 1. 모든 이벤트를 시간순으로 수집
+    # History & Motion Compression
     timeline = []
-    
-    # Dialogues
     for turn in edh_data.get("dialog_history", []):
-        # turn = ["Driver", "utterance", time_start(optional)]
-        # EDH 파일 구조상 time_start가 없을 수도 있음 (순서대로라고 가정)
-        # 하지만 TEACh는 보통 dialog_history_with_das에 timestamp가 있음
-        # 여기서는 단순화를 위해 dialog_history 리스트 순서를 따르되, 
-        # Action과 섞기 위해 별도 처리가 필요하지만, 
-        # 사용자 요청은 '압축'이 핵심이므로 Dialog -> Action 순서로 단순 병합하거나
-        # timestamp가 있다면 그걸로 정렬. 
-        # (대부분 Dialog 리스트가 먼저 나오고 그 뒤에 Action이 나옵니다.)
-        timeline.append({
-            "type": "dialog",
-            "role": turn[0],
-            "content": turn[1],
-            "time": 0 # 정렬용 더미
-        })
+        timeline.append({"type": "dialog", "role": turn[0], "content": turn[1], "time": 0})
 
-    # Actions (여기서 압축 로직 적용)
     action_history = edh_data.get("driver_action_history", [])
     compressed_actions = []
-    
-    current_motion = None # {"name": "Forward", "params": {...}, "count": 1}
+    current_motion = None 
 
     for act in action_history:
         name = act.get("action_name")
-        
-        # 이동 액션인지 확인
         is_motion = name in MOTION_PARAMS
         
         if is_motion:
-            # 같은 이동 액션이 연속되면 합침
             if current_motion and current_motion["name"] == name:
-                # 파라미터 누적
                 base_params = MOTION_PARAMS[name]
                 for k, v in base_params.items():
                     current_motion["params"][k] += v
                 current_motion["count"] += 1
             else:
-                # 다른 액션이 나오면 이전 것 저장
-                if current_motion:
-                    compressed_actions.append(current_motion)
-                
-                # 새로운 모션 시작
+                if current_motion: compressed_actions.append(current_motion)
                 current_motion = {
-                    "type": "action",
-                    "name": name, # 나중에 motion_delta로 바뀜
-                    "tool_name": "motion_delta",
-                    "params": MOTION_PARAMS[name].copy(),
-                    "count": 1,
-                    "time": act.get("time_start", 0)
+                    "type": "action", "name": name, "tool_name": "motion_delta",
+                    "params": MOTION_PARAMS[name].copy(), "count": 1, "time": act.get("time_start", 0)
                 }
         else:
-            # 이동 액션이 아니면 (Pickup 등)
             if current_motion:
                 compressed_actions.append(current_motion)
                 current_motion = None
-            
-            # 일반 액션 추가
             compressed_actions.append({
-                "type": "action",
-                "name": name,
-                "tool_name": name, # Pickup 등 원래 이름
-                "params": {},
-                "time": act.get("time_start", 0)
+                "type": "action", "name": name, "tool_name": name,
+                "params": {}, "time": act.get("time_start", 0)
             })
             
-    # 마지막 남은 모션 처리
-    if current_motion:
-        compressed_actions.append(current_motion)
-
-    # Dialog와 Action 합치기 (시간 정보가 있다면 정렬, 없으면 Dialog 먼저)
-    # TEACh EDH 파일은 보통 dialog_history가 먼저 오고 그 뒤에 driver_action_history가 시간 순으로 옴
-    # 여기서는 단순 리스트 병합 후 텍스트화
+    if current_motion: compressed_actions.append(current_motion)
     
     full_history_list = timeline + compressed_actions
-    
-    # 텍스트 변환
     history_lines = []
     for item in full_history_list:
         if item["type"] == "dialog":
             history_lines.append(f"{item['role']}: {item['content']}")
         else:
-            # Action 포맷: Driver (actions): [JSON]
-            action_json = {
-                "tool_name": item["tool_name"],
-                "parameters": item["params"]
-            }
+            action_json = {"tool_name": item["tool_name"], "parameters": item["params"]}
             history_lines.append(f"Driver (actions): [{json.dumps(action_json)}]")
 
-    history_text = "\n".join(history_lines[-20:]) # 최근 20개만
+    history_text = "\n".join(history_lines[-20:])
 
-    # --- Instruction ---
     last_instruction = "Do the next step."
     for turn in reversed(edh_data.get("dialog_history", [])):
         if turn[0] == "Commander":
@@ -371,10 +303,10 @@ def process_edh_file(edh_path: Path, game_root: Path, tool_list_json: str, proce
             
     state_text = processor.process_state(merged_state, last_instruction)
     
+    # [변경] Prompt 포맷에서 tool_list 제거
     full_prompt = BASE_PROMPT.format(
         initial_state=state_text,
-        history=history_text,
-        tool_list=tool_list_json
+        history=history_text
     )
     full_prompt += f"\n\n--- New Instruction ---\nCommander: {last_instruction}\nNow decide..."
 
@@ -384,7 +316,6 @@ def process_edh_file(edh_path: Path, game_root: Path, tool_list_json: str, proce
             "instance_id": edh_data.get("instance_id"),
             "prompt": full_prompt,
             "answer": answer_json,
-            # [요구사항 4] Success 기준: EDH 데이터는 성공한 궤적을 바탕으로 하므로 True
             "turn_last_success": True, 
             "answer_all_motion_or_objectinteraction": True
         },
@@ -396,21 +327,16 @@ def process_edh_file(edh_path: Path, game_root: Path, tool_list_json: str, proce
     }, "Success"
 
 
-# ---------- MAIN ----------
-
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--episode-root", type=str, required=True, help="Folder with EDH instances")
-    parser.add_argument("--game-root", type=str, required=True, help="Folder with Game files")
+    parser.add_argument("--episode-root", type=str, required=True)
+    parser.add_argument("--game-root", type=str, required=True)
     parser.add_argument("--output-root", type=str, required=True)
-    
     parser.add_argument("--filter-mode", type=str, default="spatial")
     parser.add_argument("--embedding-model", type=str, default="all-MiniLM-L6-v2")
     
     args = parser.parse_args()
 
-    tools, _ = load_tools(TOOLS_JSON)
-    tool_list_json = json.dumps(tools, ensure_ascii=False)
     processor = ContextProcessor(args.filter_mode, args.embedding_model)
     
     print(f"[INFO] Scanning EDH files in {args.episode_root}...")
@@ -418,24 +344,20 @@ def main():
     print(f"[INFO] Found {len(all_edh_files)} EDH files.")
 
     out_root = Path(args.output_root)
-    
     success_count = 0
     skipped_count = 0
     
     for edh_file in tqdm(all_edh_files, desc="Processing"):
-        result, msg = process_edh_file(edh_file, Path(args.game_root), tool_list_json, processor)
+        # [변경] tool_list_json 전달 제거
+        result, msg = process_edh_file(edh_file, Path(args.game_root), processor)
         
         if result:
             sample = result["sample"]
             meta = result["meta"]
-            
-            # [요구사항 3] 저장 구조: output/split/game_id/instance_id.jsonl
             save_dir = out_root / meta["split"] / meta["game_id"]
             save_dir.mkdir(parents=True, exist_ok=True)
-            
             filename = f"{meta['instance_id']}.jsonl"
             save_path = save_dir / filename
-            
             write_jsonl(save_path, [sample])
             success_count += 1
         else:

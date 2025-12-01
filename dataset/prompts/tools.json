@@ -175,7 +175,7 @@
       "name": "SelectOid",
       "action_id": 501,
       "action_type": "ProgressCheck",
-      "description": "Select or highlight an object based on a query string or object identifier.",
+      "description": "Select or highlight an object based on a text query. The query should be a string describing the object (e.g., 'mug', 'tomato'). The system resolves the best matching object internally.",
       "parameters": {
         "type": "object",
         "properties": {
@@ -188,7 +188,7 @@
       "name": "SearchObject",
       "action_id": 502,
       "action_type": "ProgressCheck",
-      "description": "Search for an object using a query string and focus the view on the best matching target.",
+      "description": "Search for an object using a text query and adjust the camera view to focus on the most relevant matching object.",
       "parameters": {
         "type": "object",
         "properties": {

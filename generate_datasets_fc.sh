@@ -8,10 +8,10 @@
 # 실제 데이터가 있는 경로로 수정해주세요.
 EPISODE_ROOT="/teach_dataset/edh_instances"
 GAME_ROOT="/teach_dataset/games"
-OUTPUT_BASE="/home/bjk/tool_learning/teach_to_tool_calling/dataset_experiments_fc"
+OUTPUT_BASE="/home/bjk/tool_learning/teach_to_tool_calling/dataset_experiments_fc_edh"
 
 # 실행할 Python 스크립트 이름 (Function Calling용)
-BUILD_SCRIPT="build_dataset_fc.py"
+BUILD_SCRIPT="build_dataset_fc_edh.py"
 
 # 경로 체크
 if [ ! -d "$EPISODE_ROOT" ]; then
@@ -34,12 +34,12 @@ echo " [Start] TEACh Dataset Generation (Function Calling Ver.)"
 echo "=========================================================="
 
 # 1. Hybrid (Ours)
-echo "[1/1] Generating 'Hybrid' Dataset for Function Calling..."
+echo "[1/1] Generating 'semantic' Dataset for Function Calling..."
 python3 $BUILD_SCRIPT \
     --episode-root "$EPISODE_ROOT" \
     --game-root "$GAME_ROOT" \
-    --output-root "$OUTPUT_BASE/hybrid_one_action" \
-    --filter-mode hybrid \
+    --output-root "$OUTPUT_BASE/semantic_fc_edh" \
+    --filter-mode semantic \
     --embedding-model "all-MiniLM-L6-v2"
 
 # (필요시 Semantic, Spatial 등 다른 모드도 아래에 추가 가능)
@@ -48,5 +48,5 @@ python3 $BUILD_SCRIPT \
 
 echo "=========================================================="
 echo " Generation Complete."
-echo " Output Directory: $OUTPUT_BASE/hybrid_ours"
+echo " Output Directory: $OUTPUT_BASE/semantic_fc_edh"
 echo "=========================================================="

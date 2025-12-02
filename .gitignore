@@ -20,3 +20,13 @@ experiment_results/
 dataset_experiments_fc/
 
 experiment_results_fc/
+
+before_dataset/
+
+dataset_experiments_edh/
+
+dataset_experiments_fc_edh/
+
+experiment_results_edh/
+
+experiment_results_fc_edh/

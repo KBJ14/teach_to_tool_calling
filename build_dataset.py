@@ -90,7 +90,7 @@ class ContextProcessor:
     def __init__(self, mode: str, model_name: str):
         self.mode = mode
         self.model = None
-        self.NEARBY_THRESHOLD = 2.5
+        self.NEARBY_THRESHOLD = 1.5
         self.LANDMARKS = {
             "Bed", "Desk", "Dresser", "ArmChair", "SideTable", "CounterTop", 
             "Floor", "Wall", "Door", "Window", "Drawer", "GarbageCan", 
@@ -161,7 +161,7 @@ class ContextProcessor:
                     score = util.cos_sim(query_embedding, obj_emb).item()
                     if score > 0.3: should_keep = True
             elif self.mode == "hybrid":
-                if is_landmark: should_keep = True
+                if is_landmark : should_keep = True
                 else:
                     semantic_hit = False
                     if self.model and query_embedding is not None:
@@ -169,7 +169,7 @@ class ContextProcessor:
                         obj_emb = self.model.encode(target_name, convert_to_tensor=True)
                         score = util.cos_sim(query_embedding, obj_emb).item()
                         if score > 0.35: semantic_hit = True
-                    if semantic_hit or is_visible: should_keep = True
+                    if semantic_hit or is_visible or is_nearby: should_keep = True
 
             if not should_keep: continue
 
@@ -267,25 +267,25 @@ def process_edh_file(edh_path: Path, game_root: Path, tool_list_json: str, proce
     }
 
     # --- [요구사항 2] History Generation & Motion Compression ---
-    
-    # 1. 모든 이벤트를 시간순으로 수집
+    # Build a timestamp-aware interleaved history (dialog + actions).
+    # 1. Build timestamp map from EDH 'interactions' (to approximate dialog times)
     timeline = []
-    
-    # Dialogues
-    for turn in edh_data.get("dialog_history", []):
-        # turn = ["Driver", "utterance", time_start(optional)]
-        # EDH 파일 구조상 time_start가 없을 수도 있음 (순서대로라고 가정)
-        # 하지만 TEACh는 보통 dialog_history_with_das에 timestamp가 있음
-        # 여기서는 단순화를 위해 dialog_history 리스트 순서를 따르되, 
-        # Action과 섞기 위해 별도 처리가 필요하지만, 
-        # 사용자 요청은 '압축'이 핵심이므로 Dialog -> Action 순서로 단순 병합하거나
-        # timestamp가 있다면 그걸로 정렬. 
-        # (대부분 Dialog 리스트가 먼저 나오고 그 뒤에 Action이 나옵니다.)
+    interactions = edh_data.get("interactions", [])
+    dialog_ts_map = {}
+    for it in interactions:
+        utt = it.get("utterance")
+        if utt:
+            dialog_ts_map[utt.strip().lower()] = it.get("time_start", 0)
+
+    # 2. Dialog History (with approx timestamps)
+    for speaker, utter in edh_data.get("dialog_history", []):
+        key = utter.strip().lower()
+        approx_ts = dialog_ts_map.get(key, -1)
         timeline.append({
             "type": "dialog",
-            "role": turn[0],
-            "content": turn[1],
-            "time": 0 # 정렬용 더미
+            "role": speaker,
+            "content": utter,
+            "time": approx_ts
         })
 
     # Actions (여기서 압축 로직 적용)
@@ -316,7 +316,7 @@ def process_edh_file(edh_path: Path, game_root: Path, tool_list_json: str, proce
                 # 새로운 모션 시작
                 current_motion = {
                     "type": "action",
-                    "name": name, # 나중에 motion_delta로 바뀜
+                    "name": name,
                     "tool_name": "motion_delta",
                     "params": MOTION_PARAMS[name].copy(),
                     "count": 1,
@@ -345,20 +345,27 @@ def process_edh_file(edh_path: Path, game_root: Path, tool_list_json: str, proce
     # TEACh EDH 파일은 보통 dialog_history가 먼저 오고 그 뒤에 driver_action_history가 시간 순으로 옴
     # 여기서는 단순 리스트 병합 후 텍스트화
     
+    # 3. Merge dialog + action → full timeline
     full_history_list = timeline + compressed_actions
+
+    # 4. Sort by timestamp (dialogs without timestamp have time=-1 and will be placed first)
+    full_history_list = sorted(full_history_list, key=lambda x: x["time"])
     
     # 텍스트 변환
     history_lines = []
     for item in full_history_list:
-        if item["type"] == "dialog":
-            history_lines.append(f"{item['role']}: {item['content']}")
+        if item["time"] < 0:
+            # Dialogs without timestamp
+            if item["type"] == "dialog":
+                history_lines.append(f"{item['role']}: {item['content']}")
+            else:
+                history_lines.append(f"Driver (action): {json.dumps({'tool_name': item['tool_name'], 'parameters': item['params']})}")
         else:
-            # Action 포맷: Driver (actions): [JSON]
-            action_json = {
-                "tool_name": item["tool_name"],
-                "parameters": item["params"]
-            }
-            history_lines.append(f"Driver (actions): [{json.dumps(action_json)}]")
+            if item["type"] == "dialog":
+                history_lines.append(f"{item['role']} ({item['time']:.1f}s): {item['content']}")
+            else:
+                ajson = {"tool_name": item["tool_name"], "parameters": item["params"]}
+                history_lines.append(f"Driver (action @ {item['time']:.1f}s): {json.dumps(ajson)}")
 
     history_text = "\n".join(history_lines[-20:]) # 최근 20개만
 
@@ -376,7 +383,7 @@ def process_edh_file(edh_path: Path, game_root: Path, tool_list_json: str, proce
         history=history_text,
         tool_list=tool_list_json
     )
-    full_prompt += f"\n\n--- New Instruction ---\nCommander: {last_instruction}\nNow decide..."
+    
 
     return {
         "sample": {

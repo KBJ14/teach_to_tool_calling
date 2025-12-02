@@ -8,10 +8,12 @@
 # 실제 데이터가 있는 경로로 수정해주세요.
 EPISODE_ROOT="/teach_dataset/edh_instances"
 GAME_ROOT="/teach_dataset/games"
-OUTPUT_BASE="/home/bjk/tool_learning/teach_to_tool_calling/dataset_experiments_fc_edh"
+OUTPUT_BASE="/home/bjk/tool_learning/teach_to_tool_calling/dataset_experiments_fc_summ_plus"
 
 # 실행할 Python 스크립트 이름 (Function Calling용)
-BUILD_SCRIPT="build_dataset_fc_edh.py"
+BUILD_SCRIPT="build_dataset_fc_summ_plus.py"
+
+export OPENAI_API_KEY=""
 
 # 경로 체크
 if [ ! -d "$EPISODE_ROOT" ]; then
@@ -38,7 +40,7 @@ echo "[1/1] Generating 'semantic' Dataset for Function Calling..."
 python3 $BUILD_SCRIPT \
     --episode-root "$EPISODE_ROOT" \
     --game-root "$GAME_ROOT" \
-    --output-root "$OUTPUT_BASE/semantic_fc_edh" \
+    --output-root "$OUTPUT_BASE/semantic_fc_summ_plus" \
     --filter-mode semantic \
     --embedding-model "all-MiniLM-L6-v2"
 
@@ -48,5 +50,5 @@ python3 $BUILD_SCRIPT \
 
 echo "=========================================================="
 echo " Generation Complete."
-echo " Output Directory: $OUTPUT_BASE/semantic_fc_edh"
+echo " Output Directory: $OUTPUT_BASE/semantic_fc_summ_plus"
 echo "=========================================================="

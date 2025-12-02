@@ -30,3 +30,11 @@ dataset_experiments_fc_edh/
 experiment_results_edh/
 
 experiment_results_fc_edh/
+
+dataset_experiments_fc_summ/
+
+dataset_experiments_fc_summ_plus/
+
+experiment_results_fc_summ/
+
+experiment_results_fc_summ_plus/

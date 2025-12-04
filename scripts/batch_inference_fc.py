@@ -20,11 +20,11 @@ from litellm import acompletion, RateLimitError
 
 # ************************************************
 # ⚠️ 보안 경고: 실제 API 키로 교체하세요
-API_KEY = ""
+API_KEY = ""  # <- 여기에 실제 키 넣기
 # ************************************************
  
 # --- Configuration ---
-API_MODEL = "openai/gpt4o" 
+API_MODEL = "openai/gpt-4o" 
 MAX_CONCURRENT_REQUESTS = 1   # Rate Limit에 따라 조절 (에러 많으면 1~2로 낮춤)
 SEMAPHORE = asyncio.Semaphore(MAX_CONCURRENT_REQUESTS)
 MAX_RETRIES = 5
@@ -105,7 +105,8 @@ def parse_tool_calls(response_message):
             "parameters": function_args
         })
     
-    if not actions: return None
+    if not actions:
+        return None
     return {"actions": actions}
 
 def get_all_jsonl_files(root_dir):
@@ -121,7 +122,8 @@ async def process_single_file(input_path, args, tools_schema):
     output_path = os.path.join(args.output_dir, relative_path)
     
     # 이미 처리된 파일 건너뛰기
-    if os.path.exists(output_path): return
+    if os.path.exists(output_path):
+        return
 
     # 폴더 생성
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -130,10 +132,12 @@ async def process_single_file(input_path, args, tools_schema):
         # 입력 파일 읽기
         with open(input_path, 'r', encoding='utf-8') as fh:
             line = fh.readline()
-            if not line.strip(): return
+            if not line.strip():
+                return
             sample = json.loads(line)
 
-        if 'prompt' not in sample: return
+        if 'prompt' not in sample:
+            return
         prompt_content = sample['prompt']
         
         final_prediction = None
@@ -150,14 +154,14 @@ async def process_single_file(input_path, args, tools_schema):
                             {"role": "user", "content": prompt_content}
                         ],
                         temperature=1,
-                        max_tokens=1024,
+                        max_tokens=1024,      # openai/gpt-4o 는 아직 max_tokens 사용 가능
                         api_key=API_KEY,
-                        tools=tools_schema,      # 👈 파일에서 로드한 스키마 사용
+                        tools=tools_schema,   # 👈 파일에서 로드한 스키마 사용
                         tool_choice="required",   # 👈 반드시 도구 사용 강제
                     )
                     
                     message = response.choices[0].message
-                    raw_response_content = str(message) # 디버깅용 전체 응답 저장
+                    raw_response_content = str(message)  # 디버깅용 전체 응답 저장
                     final_prediction = parse_tool_calls(message)
                     break 
                     
@@ -203,11 +207,13 @@ async def main():
     parser.add_argument('--input-dir', required=True)
     parser.add_argument('--output-dir', required=True)
     parser.add_argument('--tools-file', required=True, help="Path to tools.json file") # 필수 인자
-    parser.add_argument('--ids-file', default=DEFAULT_IDS_FILE, help="Optional: JSON list of instance_ids to process (defaults to selected_500_instance_ids.json in this scripts folder)") 
+    parser.add_argument('--ids-file', default=DEFAULT_IDS_FILE,
+                        help="Optional: JSON list of instance_ids to process (defaults to selected_500_instance_ids.json in this scripts folder)") 
     
     args = parser.parse_args()
 
-    if API_KEY == "YOUR_GPT_4O_API_KEY_HERE":
+    # ← 원래는 "YOUR_GPT_4O_API_KEY_HERE" 와 비교했는데, 지금 기본값은 "" 이라 항상 통과함
+    if not API_KEY:
         log("[FATAL] Please update the API_KEY variable at the top of the script!")
         sys.exit(1)
 
@@ -229,11 +235,13 @@ async def main():
                 try:
                     with open(p, 'r') as fh:
                         line = fh.readline()
-                        if not line: continue
+                        if not line:
+                            continue
                         data = json.loads(line)
                         if data.get("instance_id") in target_ids:
                             filtered_files.append(p)
-                except: continue
+                except:
+                    continue
             input_files = filtered_files
             log(f'[INFO] Filtered to {len(input_files)} files based on ids-file.')
         else:
@@ -249,5 +257,22 @@ async def main():
     tasks = [process_single_file(f, args, tools_schema) for f in input_files]
     await tqdm_asyncio.gather(*tasks, desc=f"FC Inference ({args.model_name})")
 
+    log('[INFO] All inference tasks finished, cleaning up pending asyncio tasks...')
+
+    # 🔥 여기서 남아 있는 다른 asyncio task(주로 라이브러리 내부)들 정리
+    current_task = asyncio.current_task()
+    pending = [t for t in asyncio.all_tasks() if t is not current_task and not t.done()]
+    for t in pending:
+        t.cancel()
+    if pending:
+        await asyncio.gather(*pending, return_exceptions=True)
+
+    log('[INFO] Cleanup done. Exiting main().')
+
+
 if __name__ == '__main__':
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        log("[INFO] KeyboardInterrupt received. Exiting.")
+        sys.exit(0)

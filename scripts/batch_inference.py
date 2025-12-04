@@ -216,16 +216,21 @@ async def main():
         input_files = filtered
         log(f'[INFO] After filtering, {len(input_files)} files will be processed.')
 
-    # Optional dry-run: only print matched files and exit
-    if args.dry_run:
-        log('[DRY-RUN] Listing files that would be processed:')
-        for f in input_files:
-            log(' -', f)
-        return
+    
 
     tasks = [process_single_file(f, args) for f in input_files]
     
     await tqdm_asyncio.gather(*tasks, desc=f"API Inference ({args.model_name})")
+
+    # 🔥 여기서 남아 있는 다른 asyncio task(주로 라이브러리 내부)들 정리
+    current_task = asyncio.current_task()
+    pending = [t for t in asyncio.all_tasks() if t is not current_task and not t.done()]
+    for t in pending:
+        t.cancel()
+    if pending:
+        await asyncio.gather(*pending, return_exceptions=True)
+
+    log('[INFO] Cleanup done. Exiting main().')
 
 if __name__ == '__main__':
     asyncio.run(main())

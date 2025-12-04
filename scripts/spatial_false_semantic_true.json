@@ -1,0 +1,1390 @@
+[
+  {
+    "instance_id": "57862376ad3394a1_c9dc.edh4",
+    "spatial": {
+      "instance_id": "57862376ad3394a1_c9dc.edh4",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 90
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Open",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "57862376ad3394a1_c9dc.edh4",
+      "predicted_action": {
+        "tool_name": "Open",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Open",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "8b5fede9af1ef8f7_337a.edh5",
+    "spatial": {
+      "instance_id": "8b5fede9af1ef8f7_337a.edh5",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "8b5fede9af1ef8f7_337a.edh5",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "25ef88cce38adfbc_6c10.edh1",
+    "spatial": {
+      "instance_id": "25ef88cce38adfbc_6c10.edh1",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0.8,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "25ef88cce38adfbc_6c10.edh1",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "ce0a11d25e229099_58eb.edh1",
+    "spatial": {
+      "instance_id": "ce0a11d25e229099_58eb.edh1",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0.9,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "ce0a11d25e229099_58eb.edh1",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "345624f0e74dc947_8525.edh3",
+    "spatial": {
+      "instance_id": "345624f0e74dc947_8525.edh3",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0.7,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "345624f0e74dc947_8525.edh3",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "2c3e87d21b28e516_63ec.edh2",
+    "spatial": {
+      "instance_id": "2c3e87d21b28e516_63ec.edh2",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "2c3e87d21b28e516_63ec.edh2",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "f511e02d3f84b212_e6d3.edh2",
+    "spatial": {
+      "instance_id": "f511e02d3f84b212_e6d3.edh2",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "f511e02d3f84b212_e6d3.edh2",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "555c981b1ecc6c8a_7c01.edh10",
+    "spatial": {
+      "instance_id": "555c981b1ecc6c8a_7c01.edh10",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "555c981b1ecc6c8a_7c01.edh10",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "1fd74046ded8f9d1_3990.edh1",
+    "spatial": {
+      "instance_id": "1fd74046ded8f9d1_3990.edh1",
+      "predicted_action": {
+        "tool_name": "Close",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "1fd74046ded8f9d1_3990.edh1",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "8455e3db97f9a4dc_ac3d.edh2",
+    "spatial": {
+      "instance_id": "8455e3db97f9a4dc_ac3d.edh2",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0.7,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "8455e3db97f9a4dc_ac3d.edh2",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "85ec788c6b00fb0d_49ba.edh7",
+    "spatial": {
+      "instance_id": "85ec788c6b00fb0d_49ba.edh7",
+      "predicted_action": {
+        "tool_name": "Clean",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "85ec788c6b00fb0d_49ba.edh7",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "88ddc0cbf1a23687_a55b.edh0",
+    "spatial": {
+      "instance_id": "88ddc0cbf1a23687_a55b.edh0",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 1.5,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "88ddc0cbf1a23687_a55b.edh0",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "e455dbf27ecaf413_8484.edh7",
+    "spatial": {
+      "instance_id": "e455dbf27ecaf413_8484.edh7",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0.2,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "e455dbf27ecaf413_8484.edh7",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "bbc10dbfaeac4a70_18d0.edh6",
+    "spatial": {
+      "instance_id": "bbc10dbfaeac4a70_18d0.edh6",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "bbc10dbfaeac4a70_18d0.edh6",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "c70d9a05ca542364_77d5.edh1",
+    "spatial": {
+      "instance_id": "c70d9a05ca542364_77d5.edh1",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0,
+          "y": -0.75,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "c70d9a05ca542364_77d5.edh1",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "5b559833fb343064_937c.edh11",
+    "spatial": {
+      "instance_id": "5b559833fb343064_937c.edh11",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "5b559833fb343064_937c.edh11",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "c66cfa360ba2ee00_45b2.edh6",
+    "spatial": {
+      "instance_id": "c66cfa360ba2ee00_45b2.edh6",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "c66cfa360ba2ee00_45b2.edh6",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "b20314fc5fe107f3_80ee.edh4",
+    "spatial": {
+      "instance_id": "b20314fc5fe107f3_80ee.edh4",
+      "predicted_action": null,
+      "ground_truth_action": {
+        "tool_name": "ToggleOff",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "b20314fc5fe107f3_80ee.edh4",
+      "predicted_action": {
+        "tool_name": "ToggleOff",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "ToggleOff",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "e455dbf27ecaf413_4c4d.edh6",
+    "spatial": {
+      "instance_id": "e455dbf27ecaf413_4c4d.edh6",
+      "predicted_action": {
+        "tool_name": "Slice",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "e455dbf27ecaf413_4c4d.edh6",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "b90f1131b1585ec8_d2a8.edh14",
+    "spatial": {
+      "instance_id": "b90f1131b1585ec8_d2a8.edh14",
+      "predicted_action": {
+        "tool_name": "Close",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "b90f1131b1585ec8_d2a8.edh14",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "7c0a07e02524ae40_f540.edh19",
+    "spatial": {
+      "instance_id": "7c0a07e02524ae40_f540.edh19",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "7c0a07e02524ae40_f540.edh19",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "249afd96389c8ae6_70e7.edh6",
+    "spatial": {
+      "instance_id": "249afd96389c8ae6_70e7.edh6",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "249afd96389c8ae6_70e7.edh6",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "cfeaec72e93dcf3f_8fc5.edh0",
+    "spatial": {
+      "instance_id": "cfeaec72e93dcf3f_8fc5.edh0",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Open",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "cfeaec72e93dcf3f_8fc5.edh0",
+      "predicted_action": {
+        "tool_name": "Open",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Open",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "7172fd55ac8095bd_e687.edh3",
+    "spatial": {
+      "instance_id": "7172fd55ac8095bd_e687.edh3",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": -2.75,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "7172fd55ac8095bd_e687.edh3",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "cfeaec72e93dcf3f_ee10.edh5",
+    "spatial": {
+      "instance_id": "cfeaec72e93dcf3f_ee10.edh5",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0,
+          "y": 0.3,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "cfeaec72e93dcf3f_ee10.edh5",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "cb0e41e1b364ad27_9a72.edh3",
+    "spatial": {
+      "instance_id": "cb0e41e1b364ad27_9a72.edh3",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "cb0e41e1b364ad27_9a72.edh3",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "8b5fede9af1ef8f7_337a.edh3",
+    "spatial": {
+      "instance_id": "8b5fede9af1ef8f7_337a.edh3",
+      "predicted_action": {
+        "tool_name": "Slice",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "8b5fede9af1ef8f7_337a.edh3",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "27e7a42c459affdd_9ce3.edh1",
+    "spatial": {
+      "instance_id": "27e7a42c459affdd_9ce3.edh1",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "27e7a42c459affdd_9ce3.edh1",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "41f5a3a613dbcfdb_ee75.edh5",
+    "spatial": {
+      "instance_id": "41f5a3a613dbcfdb_ee75.edh5",
+      "predicted_action": null,
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "41f5a3a613dbcfdb_ee75.edh5",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "ba1551c76888bc7e_39d6.edh7",
+    "spatial": {
+      "instance_id": "ba1551c76888bc7e_39d6.edh7",
+      "predicted_action": {
+        "tool_name": "Text",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Slice",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "ba1551c76888bc7e_39d6.edh7",
+      "predicted_action": {
+        "tool_name": "Slice",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Slice",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "c3d1e8e83a3ffcf5_0d1e.edh2",
+    "spatial": {
+      "instance_id": "c3d1e8e83a3ffcf5_0d1e.edh2",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 2.2,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "c3d1e8e83a3ffcf5_0d1e.edh2",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "dd2efe33087ddc60_cb3a.edh4",
+    "spatial": {
+      "instance_id": "dd2efe33087ddc60_cb3a.edh4",
+      "predicted_action": null,
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "dd2efe33087ddc60_cb3a.edh4",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "e141c8f6246ebd83_9dee.edh1",
+    "spatial": {
+      "instance_id": "e141c8f6246ebd83_9dee.edh1",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0.5,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Open",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "e141c8f6246ebd83_9dee.edh1",
+      "predicted_action": {
+        "tool_name": "Open",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Open",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "6ccc8b815fbc093a_3e3a.edh1",
+    "spatial": {
+      "instance_id": "6ccc8b815fbc093a_3e3a.edh1",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0.8,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Slice",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "6ccc8b815fbc093a_3e3a.edh1",
+      "predicted_action": {
+        "tool_name": "Slice",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Slice",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "97cbfa8d72926abe_e8c7.edh0",
+    "spatial": {
+      "instance_id": "97cbfa8d72926abe_e8c7.edh0",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {
+          "object": "Mug"
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "97cbfa8d72926abe_e8c7.edh0",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "a690a35743c855aa_4c00.edh10",
+    "spatial": {
+      "instance_id": "a690a35743c855aa_4c00.edh10",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "ToggleOff",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "a690a35743c855aa_4c00.edh10",
+      "predicted_action": {
+        "tool_name": "ToggleOff",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "ToggleOff",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "c02445dd7a5b6f26_d92a.edh1",
+    "spatial": {
+      "instance_id": "c02445dd7a5b6f26_d92a.edh1",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0.25,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "c02445dd7a5b6f26_d92a.edh1",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "4ed06fe52d91780d_763d.edh4",
+    "spatial": {
+      "instance_id": "4ed06fe52d91780d_763d.edh4",
+      "predicted_action": null,
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "4ed06fe52d91780d_763d.edh4",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "a4352bf3d6d33265_a7bd.edh2",
+    "spatial": {
+      "instance_id": "a4352bf3d6d33265_a7bd.edh2",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": -90
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Slice",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "a4352bf3d6d33265_a7bd.edh2",
+      "predicted_action": {
+        "tool_name": "Slice",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Slice",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "a44d13c7da084070_fe04.edh1",
+    "spatial": {
+      "instance_id": "a44d13c7da084070_fe04.edh1",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "a44d13c7da084070_fe04.edh1",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "f0f408b728183c76_09d4.edh0",
+    "spatial": {
+      "instance_id": "f0f408b728183c76_09d4.edh0",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {
+          "object": "Knife"
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "f0f408b728183c76_09d4.edh0",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "945e91e18f9c99c0_91c5.edh2",
+    "spatial": {
+      "instance_id": "945e91e18f9c99c0_91c5.edh2",
+      "predicted_action": null,
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "945e91e18f9c99c0_91c5.edh2",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "fc0fe94a4c8e3a29_9052.edh3",
+    "spatial": {
+      "instance_id": "fc0fe94a4c8e3a29_9052.edh3",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0.3,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "fc0fe94a4c8e3a29_9052.edh3",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "1801730beafdda15_f501.edh16",
+    "spatial": {
+      "instance_id": "1801730beafdda15_f501.edh16",
+      "predicted_action": {
+        "tool_name": "Close",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "1801730beafdda15_f501.edh16",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "fe6b3de8c88b8573_9f76.edh6",
+    "spatial": {
+      "instance_id": "fe6b3de8c88b8573_9f76.edh6",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0.6,
+          "y": 0,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "fe6b3de8c88b8573_9f76.edh6",
+      "predicted_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Pickup",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "57fed82c1a4670eb_5594.edh4",
+    "spatial": {
+      "instance_id": "57fed82c1a4670eb_5594.edh4",
+      "predicted_action": {
+        "tool_name": "motion_delta",
+        "parameters": {
+          "x": 0,
+          "y": 0.5,
+          "z": 0,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "57fed82c1a4670eb_5594.edh4",
+      "predicted_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "Place",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  },
+  {
+    "instance_id": "0fc859faf40296d7_c87e.edh2",
+    "spatial": {
+      "instance_id": "0fc859faf40296d7_c87e.edh2",
+      "predicted_action": null,
+      "ground_truth_action": {
+        "tool_name": "ToggleOff",
+        "parameters": {}
+      },
+      "correct": false
+    },
+    "semantic": {
+      "instance_id": "0fc859faf40296d7_c87e.edh2",
+      "predicted_action": {
+        "tool_name": "ToggleOff",
+        "parameters": {}
+      },
+      "ground_truth_action": {
+        "tool_name": "ToggleOff",
+        "parameters": {}
+      },
+      "correct": true
+    }
+  }
+]

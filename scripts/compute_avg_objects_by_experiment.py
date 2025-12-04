@@ -121,7 +121,7 @@ def compute_avg_for_experiment(exp_dir: str, ids: List[str]) -> Dict:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--experiments-root', default='teach_to_tool_calling/dataset_experiments', help='Root where experiment datasets live')
+    parser.add_argument('--experiments-root', default='teach_to_tool_calling/dataset_experiments_edh', help='Root where experiment datasets live')
     parser.add_argument('--ids-file', required=True, help='JSON array selected instance IDs')
     parser.add_argument('--out-file', default='teach_to_tool_calling/scripts/selected_500_avg_objects.json', help='Output JSON file for results')
     parser.add_argument('--categories', default='hybrid,spatial,semantic', help='Comma-separated substrings to match experiment folders')

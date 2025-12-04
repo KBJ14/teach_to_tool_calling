@@ -77,6 +77,8 @@ def main():
     parser.add_argument('--debug-missing', action='store_true', help='Print instance IDs not found in base-dir')
     parser.add_argument('--summary-file', type=str, default=None, help='Append a JSON summary line to this file (JSONL)')
     parser.add_argument('--experiment-name', type=str, default=None, help='Optional experiment name to record in the summary')
+    parser.add_argument('--trial-number', type=int, default=None, help='Optional trial number to record in the summary')
+    
     args = parser.parse_args()
 
     # Load selected ids
@@ -134,11 +136,8 @@ def main():
     if args.summary_file:
         summary = {
             'experiment_name': args.experiment_name or os.path.basename(args.base_dir.rstrip('/')),
-            'base_dir': args.base_dir,
-            'selected_total': total,
-            'found_in_base_dir': found,
-            'correct_first_action': correct,
-            'accuracy': accuracy,
+            'trial' : args.trial_number,
+            'accuracy': accuracy
         }
         # add optional debug info
         if args.debug_missing:

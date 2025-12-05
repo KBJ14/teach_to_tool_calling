@@ -25,7 +25,7 @@ API_KEY = ""  # <- 여기에 실제 키 넣기
  
 # --- Configuration ---
 API_MODEL = "openai/gpt-4o" 
-MAX_CONCURRENT_REQUESTS = 1   # Rate Limit에 따라 조절 (에러 많으면 1~2로 낮춤)
+MAX_CONCURRENT_REQUESTS = 5   # Rate Limit에 따라 조절 (에러 많으면 1~2로 낮춤)
 SEMAPHORE = asyncio.Semaphore(MAX_CONCURRENT_REQUESTS)
 MAX_RETRIES = 5
 BASE_DELAY = 5

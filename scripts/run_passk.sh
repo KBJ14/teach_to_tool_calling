@@ -2,8 +2,8 @@
 # Usage: ./run_passk.sh /path/to/accuracy/dir experiment_name [/path/to/out.jsonl]
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DEFAULT_INPUT_DIR="$SCRIPT_DIR/accuracy/gpt-4o_semantic_edh"
-DEFAULT_NAME="gpt-4o_semantic_edh"
+DEFAULT_INPUT_DIR="$SCRIPT_DIR/accuracy/gpt-4o_semantic_fc_summ_plus"
+DEFAULT_NAME="gpt-4o_semantic_fc_summ_plus"
 
 if [ "$#" -eq 0 ]; then
   INPUT_DIR="$DEFAULT_INPUT_DIR"

@@ -24,7 +24,7 @@ API_KEY = ""
 
 # --- Configuration ---
 API_MODEL = "gpt-4o" 
-MAX_CONCURRENT_REQUESTS = 1    # 👈 2. [수정] 동시 요청 수를 보수적으로 낮춤 (10 -> 5)
+MAX_CONCURRENT_REQUESTS = 5   # 👈 2. [수정] 동시 요청 수를 보수적으로 낮춤 (10 -> 5)
 SEMAPHORE = asyncio.Semaphore(MAX_CONCURRENT_REQUESTS)
 MAX_RETRIES = 5                # 최대 재시도 횟수
 BASE_DELAY = 5                 # 기본 지연 시간 (초)

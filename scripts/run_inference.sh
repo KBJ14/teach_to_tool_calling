@@ -49,30 +49,30 @@ get_trial_dir() {
 #     --ids-file selected_500_instance_ids.json
 
 
-# 4. Semantic EDH
-echo "Running Semantic EDH..."
-TRIAL_DIR=$(get_trial_dir "${BASE_OUTPUT}" "${API_MODEL}_semantic_edh")
-mkdir -p "${TRIAL_DIR}"
-BASE_OUT_DIR="${TRIAL_DIR}/${API_MODEL}_semantic_edh/valid_unseen"
-mkdir -p "${BASE_OUT_DIR}"
-echo "Writing results to: ${BASE_OUT_DIR}"
-python3 $PYTHON_SCRIPT \
-    --model-name $API_MODEL \
-    --input-dir "${BASE_INPUT}/semantic_edh/valid_unseen" \
-    --output-dir "${BASE_OUT_DIR}" \
-    --ids-file selected_500_instance_ids.json
-
-# # 5. Spatial EDH
-# echo "Running Spatial EDH..."
-# TRIAL_DIR=$(get_trial_dir "${BASE_OUTPUT}" "${API_MODEL}_spatial_edh")
+# # 4. Semantic EDH
+# echo "Running Semantic EDH..."
+# TRIAL_DIR=$(get_trial_dir "${BASE_OUTPUT}" "${API_MODEL}_semantic_edh")
 # mkdir -p "${TRIAL_DIR}"
-# BASE_OUT_DIR="${TRIAL_DIR}/${API_MODEL}_spatial_edh/valid_unseen"
+# BASE_OUT_DIR="${TRIAL_DIR}/${API_MODEL}_semantic_edh/valid_unseen"
 # mkdir -p "${BASE_OUT_DIR}"
 # echo "Writing results to: ${BASE_OUT_DIR}"
 # python3 $PYTHON_SCRIPT \
 #     --model-name $API_MODEL \
-#     --input-dir "${BASE_INPUT}/spatial_edh/valid_unseen" \
+#     --input-dir "${BASE_INPUT}/semantic_edh/valid_unseen" \
 #     --output-dir "${BASE_OUT_DIR}" \
 #     --ids-file selected_500_instance_ids.json
-# echo "All experiments queued. Check output directories for results."
+
+# 5. Spatial EDH
+echo "Running Spatial EDH..."
+TRIAL_DIR=$(get_trial_dir "${BASE_OUTPUT}" "${API_MODEL}_spatial_edh")
+mkdir -p "${TRIAL_DIR}"
+BASE_OUT_DIR="${TRIAL_DIR}/${API_MODEL}_spatial_edh/valid_unseen"
+mkdir -p "${BASE_OUT_DIR}"
+echo "Writing results to: ${BASE_OUT_DIR}"
+python3 $PYTHON_SCRIPT \
+    --model-name $API_MODEL \
+    --input-dir "${BASE_INPUT}/spatial_edh/valid_unseen" \
+    --output-dir "${BASE_OUT_DIR}" \
+    --ids-file selected_500_instance_ids.json
+echo "All experiments queued. Check output directories for results."
 
